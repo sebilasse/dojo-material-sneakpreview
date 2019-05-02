@@ -1,0 +1,152 @@
+/* Base for checkbox, toggle, radio etc. */
+.normal {}
+.root {
+	--checkbox-full: var(--ui-full);
+	--checkbox-off: var(--ui-off);
+	--checkbox-ripple-alpha: 1;
+	--checkbox-ripple-size: 2;
+	--root-bg: var(--ui-bg);
+	color: var(--text);
+}
+@media (pointer:fine) {
+	.root { --checkbox-ripple-alpha: 0.8; }
+}
+.wrapper { composes: wrapper from './_ui.m.css'; }
+.input { composes: input from './_ui.m.css'; }
+.inner { composes: inner from './_ui.m.css'; }
+.root.wrapper {
+	padding: 0;
+	height: var(--ui-outer-h);
+	margin-bottom: var(--line);
+}
+.root .input {
+	top: var(--ui-t);
+}
+
+.disabled { opacity: var(--disabledAlpha); }
+
+.enabled .input,
+.enabled label {
+	cursor: pointer;
+}
+.root .inner {
+	display: flex;
+  justify-content: center;
+  align-items: center;
+	align-self: flex-start;
+	margin: var(--ui-t) var(--spacing) 0 0;
+	padding: 0;
+}
+.root:hover .inner,
+.root:hover .inner::after {
+	border-color: var(--ui-hover);
+}
+
+.root label ~ .inner {
+	margin-left: var(--spacing);
+}
+.inner::before {
+	content: "";
+	opacity: 0;
+	transform: scale(0, 0);
+	border-radius: 50%;
+	background-color: var(--ui-accent);
+}
+.inner::after {
+	content: "";
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	transition: background-color var(--ui-dpd-16) var(--ui-easing);
+	border: var(--ui-border-width-emphasized) solid var(--ui-border);
+	border-radius: var(--ui-border-radius);
+}
+.enabled .inner::after {
+	background-color: var(--root-bg);
+}
+
+.disabled .input ~ .inner::after {
+	background-color: var(--ui-outline);
+}
+
+
+
+/* Checked styles */
+.root:not(:hover) .input:checked ~ .inner:not(.parentSchema)::after {
+	border-color: var(--ui-border);
+}
+.root:not(:hover) .input:not(:checked) ~ .inner:not(.parentSchema)::after {
+	border-color: var(--ui-bg);
+}
+
+
+
+/* prevent ripple animation on page load */
+.enabled.normal .input:not(:hover) ~ .inner::before,
+.enabled.toggle .input:not(:hover) ~ .inner .toggleSwitch::before {
+	visibility: hidden;
+	transition: all 0.1s var(--ui-dpd-16);
+}
+/* switch on/off ripple animation */
+@keyframes ripple {
+  0% { opacity: var(--checkbox-ripple-alpha); transform: scale(1,1); }
+  100% { opacity: 0; transform: scale(var(--checkbox-ripple-size),var(--checkbox-ripple-size)); }
+}
+.enabled.normal .input:checked ~ .inner::before,
+.enabled.toggle .input:checked ~ .inner .toggleSwitch::before {
+	background-color: var(--ui-accent);
+	animation: ripple var(--ui-dpd-16) var(--ui-easing) 0s 1 normal none;
+}
+@keyframes rippleOff {
+  0% { opacity: var(--checkbox-ripple-alpha); transform: scale(1,1); }
+  100% { opacity: 0; transform: scale(var(--checkbox-ripple-size),var(--checkbox-ripple-size)); }
+}
+.enabled.normal .input:not(:checked) ~ .inner::before {
+	background-color: var(--checkbox-off);
+	animation: rippleOff var(--ui-dpd-16) var(--ui-easing) 0s 1 normal none;
+}
+
+/* invalid styles */
+.invalid .inner::after {
+	border-color: var(--ui-error);
+}
+.invalid .inner::before {
+	color: var(--ui-error);
+}
+/* valid style */
+.valid .inner::after {
+	border-color: var(--ui-success);
+}
+.valid .inner::before {
+	color: var(--ui-success);
+}
+
+.focused { }
+/* Focused styles TODO FIXME*/
+/*
+.focused span {
+	color: var(--ui-focus);
+}
+.focused.toggle span {
+	color: var(--text);
+}
+.focused .inputWrapper::before {
+	color: var(--ui-focus);
+}
+.focused .inputWrapper::after {
+	border: var(--ui-border-width-emphasized) solid var(--ui-focus);
+	box-shadow: var(--ui-dp-2);
+}
+
+.focused .toggleSwitch {
+	border-color: var(--ui-focus);
+	box-shadow: var(--ui-dp-2);
+}
+.focused .input:checked ~ .toggleSwitch {
+	box-shadow: var(--ui-dp-2);
+}
+.focused .onLabel,
+.focused .offLabel {
+	color: var(--ui-focus);
+}
+*/

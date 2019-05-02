@@ -1,0 +1,135 @@
+.root { composes: root from './checkboxBase.m.css'; }
+.parentSchema { composes: parentSchema from './checkboxBase.m.css'; }
+.wrapper { composes: wrapper from './checkboxBase.m.css'; }
+.inputWrapper { composes: inputWrapper from './checkboxBase.m.css'; }
+.input { composes: input from './checkboxBase.m.css'; }
+.inner { composes: inner from './checkboxBase.m.css'; }
+.square { composes: square from './_ui.m.css'; }
+.rectangle { composes: rectangle from './_ui.m.css'; }
+.responsive { composes: responsive from './checkboxBase.m.css'; }
+
+.disabled { composes: disabled from './checkboxBase.m.css'; }
+.enabled { composes: enabled from './checkboxBase.m.css'; }
+.invalid { composes: invalid from './checkboxBase.m.css'; }
+.valid { composes: valid from './checkboxBase.m.css'; }
+.focused { composes: focused from './checkboxBase.m.css'; }
+.normal { composes: normal from './checkboxBase.m.css'; }
+.toggle { composes: toggle from './checkboxBase.m.css'; }
+.toggleSwitch { composes: toggleSwitch from './checkboxBase.m.css'; }
+
+/* Normal (checkmark) mode */
+.checkIcon {
+	transition: transform var(--ui-dpd-1) var(--ui-easing);
+}
+.inner .checkIcon {
+	z-index: 2;
+	display: inline-block;
+	color: var(--text);
+}
+
+.normal .input:checked ~ .inner::after {
+	background: var(--ui-bg);
+}
+.root .input:not(:checked) ~ .inner .checkIcon {
+	transform: scale(0, 0);
+}
+.root .input:checked ~ .inner .checkIcon {
+	transform: scale(var(--check-scale), var(--check-scale));
+}
+
+/* Toggle mode */
+/* TODO
+toggle with on off but without top-label margin
+*/
+.toggle .input {
+	width: 100%; /*calc(var(--ui-inner-h) * 2);*/
+}
+
+
+.root.toggle.wrapper {
+	height: calc(var(--ui-outer-h) - 1px);
+}
+
+.toggle .inner {
+	padding-top: 0;
+}
+.toggle .inner::after {
+	background: linear-gradient(to right, var(--ui-bg), var(--ui-bg) 50%, var(--bg) 50%, var(--bg));
+	background-size: 200% 200%;
+	border: var(--ui-border-width) solid var(--ui-border);
+	border-radius: calc(var(--ui-inner-h) / 4);
+	position: relative;
+	padding: 0;
+	line-height: 0;
+	height: calc(var(--ui-inner-h) / 2);
+}
+@keyframes bgToggle {
+  0%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes bgToggleOff {
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+.toggle .input:not(:checked) ~ .inner::after {
+	animation: bgToggleOff var(--ui-dpd-1) var(--ui-easing) forwards;
+}
+.toggle .input:checked ~ .inner::after {
+	animation: bgToggle var(--ui-dpd-1) var(--ui-easing);
+}
+.toggleSwitch {
+	composes: absolute from './_ui.m.css';
+	composes: toggleSwitch from './checkboxBase.m.css';
+	transform: translate(0, 0);
+	transition: transform var(--ui-dpd-1) var(--ui-easing);
+	background-color: var(--checkbox-full);
+	box-shadow: var(--ui-dp-2);
+	z-index: 2;
+}
+.enabled.wrapper:hover .input ~ .inner .toggleSwitch {
+	box-shadow: var(--ui-dp-1);
+}
+.enabled.wrapper:hover .input:checked ~ .inner .toggleSwitch {
+	background-color: var(--ui-flat-accent);
+}
+.toggleSwitch,
+.toggleSwitch::before {
+	width: var(--ui-inner-h);
+	height: var(--ui-inner-h);
+	border-radius: 50%;
+}
+.toggleSwitch::before {
+	content: "";
+	opacity: 0;
+}
+/* Checked styles */
+.input:checked ~ .inner .toggleSwitch {
+	transform: translate(100%, 0);
+}
+.enabled:not(:hover) .input.parentSchema:checked ~ .inner .toggleSwitch {
+	background-color: var(--ui-accent);
+}
+.enabled:not(:hover) .input:not(.parentSchema):checked ~ .inner .toggleSwitch {
+	background-color: var(--ui-border);
+}
+.enabled .parentSchema.input:checked ~ .inner .toggleSwitch {
+	border-color: var(--ui-border);
+}
+/* switch off animation */
+@keyframes switchOff {
+	0% { box-shadow: 0 0 0 1px var(--ui-border); opacity: 0; }
+	64% { box-shadow: calc(var(--ui-inner-h) / 2) 0px calc(var(--ui-inner-h) / 2.2) var(--bg); opacity: 0.56; }
+	100% { opacity: 0; }
+}
+.enabled .input:not(:checked) ~ .inner .toggleSwitch::before {
+	animation: switchOff var(--ui-dpd-2) var(--ui-easing) 1;
+}
+/* disabled and readonly styles */
+.disabled .toggleSwitch,
+.readonly .toggleSwitch {
+	background-color: var(--ui-border);
+	border-color: var(--ui-border);
+}
+
+.valid {}
+.invalid {}

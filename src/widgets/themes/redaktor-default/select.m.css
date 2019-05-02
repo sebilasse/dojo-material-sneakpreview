@@ -1,0 +1,157 @@
+@import './text-input.m.css';
+
+.smallTypo, .defaultTypo, .mediumTypo, .largeTypo, .strongTypo,
+.smallUI, .defaultUI, .mediumUI, .largeUI,
+.wrapper, .inner, .prefix, .suffix, .hasPrefix, .hasSuffix,
+.responsive, .square, .primary, .secondary, .border, .expand, .fixed,
+.valid, .invalid, .enabled, .disabled, .readonly, .required, .focused,
+.primary, .secondary, .parentSchema, .staticLabel, .slideLabel, .noLabel { }
+
+.root, .root * { box-sizing: border-box; }
+.root {
+	composes: root from "./text-input.m.css";
+}
+
+.inputWrapper {
+	position: relative;
+}
+
+/* custom input styles */
+.trigger {
+	--tb: calc(var(--line) - var(--padding-top) - var(--ui-border-width) * 2);
+	--lr: calc(var(--line) / 2);
+	padding: var(--tb) var(--lr) var(--tb) var(--lr);
+	margin: 0 0 var(--ui-border-width) 0;
+	appearance: none;
+	min-width: 200px;
+	font-size: initial;
+	line-height: initial;
+	width: 100%;
+	background-color: var(--ui-full);
+	border: var(--ui-border-width) solid var(--ui-border);
+	border-bottom-color: var(--ui-border);
+	cursor: pointer;
+	outline: none;
+	position: relative;
+	text-align: left;
+	border-radius: 0;
+}
+
+.trigger:focus {
+	border-color: var(--ui-focus);
+	box-shadow: var(--ui-dp-1);
+}
+
+.placeholder {
+	color: var(--text-muted);
+}
+
+.arrow {
+	composes: ui-typo-large from "./_ui.m.css";
+	--w: calc(var(--line3) - var(--padding-top));
+	--tb: calc(var(--line) - var(--padding-top) - var(--ui-border-width) * 2);
+	border-left: var(--ui-border-width) solid var(--ui-border);
+	width: var(--w);
+	height: calc(100% - var(--ui-border-width) * 3);
+	top: var(--ui-border-width);
+	padding-top: var(--tb);
+	right: 0;
+	color: var(--text-muted);
+	text-align: center;
+	pointer-events: none;
+	position: absolute;
+}
+
+.dropdown {
+	box-shadow: var(--ui-dp-2);
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	transition: opacity var(--ui-dpd-2) var(--ui-easing);
+	width: 100%;
+}
+
+.open {
+	z-index: var(--zindex-dropdown);
+}
+
+.open .dropdown {
+	opacity: 1;
+	pointer-events: all;
+}
+
+/* native input styles */
+.input {
+	appearance: none;
+	--tb: calc(var(--line) - var(--padding-top));
+	--lr: calc(var(--line) / 2);
+	padding: var(--tb) var(--lr) var(--tb) var(--lr);
+
+	border: var(--ui-border-width) solid var(--ui-border);
+	border-bottom-color: var(--ui-border);
+	font-size: inherit;
+	line-height: inherit;
+	transition: all var(--ui-dpd-1) var(--ui-easing);
+	width: 100%;
+	border-radius: 0;
+	margin: 0;
+	cursor: pointer;
+	display: block;
+	min-width: 200px;
+}
+
+.input:focus {
+	border-color: var(--ui-focus);
+	box-shadow: var(--ui-dp-1);
+}
+
+/* State classes */
+.disabled .input,
+.readonly .input,
+.disabled .trigger,
+.readonly .trigger {
+	background-color: var(--ui-disabled);
+}
+
+
+/*
+.invalid {
+  --sd1       : color(var(--ui-error) alpha(20%));
+  --sd2       : color(var(--ui-error) alpha(14%));
+}
+.valid {
+	--sd1       : color(var(--ui-success) alpha(20%));
+  --sd2       : color(var(--ui-success) alpha(14%));
+}
+*/
+.invalid .input,
+.invalid .trigger {
+	/* border-color: color(var(--ui-error) saturation(-9%) lightness(+37%)); */
+	border-bottom-color: var(--ui-error);
+}
+.invalid .input:focus,
+.invalid .trigger:focus {
+	border-color: var(--ui-error);
+	box-shadow: var(--ui-dp-2);
+}
+.invalid .arrow {
+	/* border-left-color: color(var(--ui-error) saturation(-9%) lightness(+37%)); */
+	color: var(--ui-error);
+}
+
+.valid .input,
+.valid .trigger {
+	/* border-color: color(var(--ui-success) saturation(-32%) lightness(+55%)); */
+	border-bottom-color: var(--ui-success);
+}
+.valid .input:focus,
+.valid .trigger:focus {
+	border-color: var(--ui-success);
+	box-shadow: var(--ui-dp-2);
+}
+.valid .arrow {
+	/* border-left-color: color(var(--ui-success) saturation(-32%) lightness(+55%)); */
+	color: var(--ui-success);
+}
+.focused { }
+.required { }

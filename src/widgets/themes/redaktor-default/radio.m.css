@@ -1,0 +1,73 @@
+.root {
+	composes: root from './checkboxBase.m.css';
+	composes: root from './_ui.m.css';
+}
+.wrapper { composes: wrapper from './checkboxBase.m.css'; }
+.inner {
+	composes: inner from './checkboxBase.m.css';
+	composes: circle from './_ui.m.css';
+}
+.inputWrapper { composes: inputWrapper from './checkboxBase.m.css'; }
+.input { composes: input from './checkboxBase.m.css'; }
+.responsive { composes: responsive from './checkboxBase.m.css'; }
+.disabled { composes: disabled from './checkboxBase.m.css'; }
+.enabled { composes: enabled from './checkboxBase.m.css'; }
+.invalid { composes: invalid from './checkboxBase.m.css'; }
+.valid { composes: valid from './checkboxBase.m.css'; }
+.focused { composes: focused from './checkboxBase.m.css'; }
+.normal { composes: normal from './checkboxBase.m.css'; }
+.parentSchema { }
+
+.root .inner, .root .inner::before {
+	border-radius: 50%;
+}
+.root .inner {
+	width: var(--ui-inner-h);
+	height: var(--ui-inner-h);
+	padding: 0;
+	border: var(--ui-border-width-emphasized) solid var(--ui-border);
+}
+.root:hover .inner {
+	border-color: var(--ui-hover);
+}
+.enabled .inner {
+	background-color: var(--root-bg);
+}
+/*
+.dark .inner {
+	border: var(--ui-border-width-emphasized) solid var(--m-500);
+}*/
+.root .input:checked:active ~ .inner::before {
+	transition: opacity .3s;
+	animation: ripple var(--ui-dpd-16) var(--ui-easing) 1 .08s;
+}
+.root.normal .inner::after {
+	border-radius: 50%;
+	transition: transform var(--ui-dpd-4) var(--ui-easing);
+	transform: translate3d(0, 0, 0);
+	transform-origin: center;
+	transform: scale(0, 0);
+}
+.root.normal .input:checked ~ .inner::after {
+	background-color: var(--ui-accent);
+	transform: scale(0.5, 0.5);
+}
+
+/* required style, only applies to inputs with a label TODO old */
+.required span::before {
+	content: '*';
+}
+/* valid style */
+.valid .inner {
+	border-color: var(--ui-success);
+}
+.valid .inner::before {
+	background-color: var(--ui-success);
+}
+/* invalid style */
+.invalid .inner {
+	border-color: var(--ui-error);
+}
+.invalid .prefix::before {
+	background-color: var(--ui-error);
+}
