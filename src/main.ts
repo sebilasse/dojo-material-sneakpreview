@@ -4,6 +4,8 @@ import { Registry } from '@dojo/framework/widget-core/Registry';
 import Injector from '@dojo/framework/widget-core/Injector';
 import App from './App';
 import r from './widgets/themes/redaktor-default';
+import ResizeObserver from 'resize-observer-polyfill';
+import '@dojo/shim';
 
 const themes: { [index: string]: any } = {
 	r,

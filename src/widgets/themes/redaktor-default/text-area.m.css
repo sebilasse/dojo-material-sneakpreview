@@ -1,4 +1,6 @@
 .root { composes: root from './text-input.m.css'; }
+.square { composes: square from './_ui.m.css'; }
+.absolute { composes: absolute from './_ui.m.css'; }
 .wrapper { composes: wrapper from './text-input.m.css'; }
 .inner { composes: inner from './text-input.m.css'; }
 .input { composes: input from './text-input.m.css'; }
@@ -16,29 +18,79 @@
 .invalid { composes: invalid from './text-input.m.css'; }
 .slideLabel { composes: slideLabel from './text-input.m.css'; }
 .staticLabel { composes: staticLabel from './text-input.m.css'; }
-.square { composes: square from './_ui.m.css'; }
-.absolute { composes: absolute from './_ui.m.css'; }
+.filled { composes: filled from './text-input.m.css'; }
+.outlined { composes: outlined from './text-input.m.css'; }
+.shaped { }
 
-.root.expand .wrapper {
-  height: auto;
-  margin-bottom: var(--wrapper-b);
+/* TODO nojs for expand ? */
+.root {
+  margin-bottom: var(--line);
 }
-.root.fixed .wrapper {
+.expand.root {
+  min-height: calc(var(--ui-outer-h) + var(--line2));
+}
+.expand .wrapper {
   height: auto;
-  margin-bottom: var(--wrapper-max-b)
+  margin-bottom: var(--ui-t);
+}
+.fixed .wrapper {
+  height: auto;
+  margin-bottom: var(--ui-t);
+  padding-right: var(--ui-border-width-emphasized);
+}
+
+.root .input {
+  /* no resize transition */
+  position: relative;
+  transition: none;
+  padding-top: calc(var(--ui-t) + var(--padding-top));
+  padding-bottom: 0;
+  border: none;
 }
 .root.expand textarea.input {
   overflow: hidden;
   resize: none;
 }
-.root .input {
-  /* no resize transition */
-  position: relative;
-  transition: none;
-  padding-top: calc(var(--wrapper-max-b) + var(--padding-top));
-  padding-bottom: 0;
+
+.outlined.staticLabel .wrapper > label,
+.outlined.slideLabel .input:focus ~ label,
+.outlined.slideLabel .input:not(:placeholder-shown) ~ label {
+  top: calc(var(--ui-t) - (var(--margin-bottom) * var(--small-size)) - var(--line));
 }
-.border {
-	transition: background-color var(--ui-dpd-0) var(--ui-easing) 0ms;
+.root .border {
 	bottom: calc(var(--ui-border-width-emphasized) * -1);
+}
+.root .border::before {
+  display: none;
+}
+
+.bg {
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 100%;
+  height: calc(100% + var(--line));
+}
+.filled .bg {
+  border-radius: var(--ui-border-radius-emphasized) var(--ui-border-radius-emphasized) 0 0;
+	background: var(--input-fill);
+}
+.outlined .bg {
+	border-radius: var(--ui-border-radius-emphasized);
+  border: var(--ui-border-width) solid var(--ui-outline);
+}
+.expand.outlined .input:focus ~ .bg {
+	border: var(--ui-border-width-emphasized) dotted var(--ui-outline);
+}
+.outlined.focused .bg,
+.outlined:focus-within .bg {
+	border-width: var(--ui-border-width-emphasized);
+}
+.outlined.invalid .bg,
+.outlined.enabled .input:invalid ~ .bg {
+	border-color: var(--ui-error);
+}
+
+.root.expand:not(.outlined) .input:focus:not(:invalid) ~ .border::after {
+  border-top: var(--ui-border-width-emphasized) dotted var(--root-bg);
 }

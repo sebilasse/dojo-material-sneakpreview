@@ -2,7 +2,7 @@ import { theme, customElement } from '../common/Widget';
 import { Keys, keyName } from '../common/util';
 import { CustomElementChildType } from '@dojo/framework/widget-core/registerCustomElement';
 import ClickBase, { ClickProperties } from '../baseClick';
-import * as css from '../themes/redaktor-default/button.m.css';
+import * as css from '../themes/redaktor-default/chip.m.css';
 
 /**
  * @type ChipProperties
@@ -17,7 +17,7 @@ export interface ChipProperties extends ClickProperties {
 
 @theme(css)
 @customElement<ChipProperties>({
-	tag: 'redaktor-button',
+	tag: 'redaktor-chip',
 	childType: CustomElementChildType.TEXT,
 	attributes: [ 'id', 'name', 'value' ],
 	properties: [

@@ -7,8 +7,8 @@ import isPrototype from '../lang/isPrototype';
 import { isObject } from '../lang/isObjectTypes';
 import { isIndex, isArrayLike, isTypedArray } from '../lang/isArrayTypes';
 import { toStr } from '../lang/to';
-import { each as E, map, reduce, filter } from '../Collection/each';
-export const each = E;
+import { each /*as E*/, map, reduce, filter } from '../Collection/each';
+//export const each = E; // CYCLICAL !
 
 const hasOwnProperty = Object.hasOwnProperty;
 const oIs = (v: any) => {

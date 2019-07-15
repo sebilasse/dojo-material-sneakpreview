@@ -1,4 +1,4 @@
-import { LabeledProperties, InputProperties, Input } from '../common/interfaces';
+import { LabeledProperties, GenericInputProperties, Input } from '../common/interfaces';
 import {
   DNode, v, w, WidgetBase, ThemedBase, ThemedProperties, theme, customElement
 } from '../common/Widget';
@@ -206,17 +206,17 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 	}
 
   private _onFocus(evt: FocusEvent) {
-    const { key, onFocus } = this.properties;
-    onFocus && onFocus(evt);
+    const { key, value = '', onFocus } = this.properties;
+    onFocus && onFocus(evt, value, key);
   }
 	private _onBlur(evt: FocusEvent) {
-		const { key, onBlur } = this.properties;
-		onBlur && onBlur(evt);
+		const { key, value = '', onBlur } = this.properties;
+		onBlur && onBlur(evt, value, key);
 	}
 
-	private _onChange(evt: Input) {
-		const { key, onChange } = this.properties;
-		onChange && onChange(evt);
+	private _onChange(value: string, key: string|number|undefined) {
+		const { /*key, value = '',*/ onChange } = this.properties;
+		onChange && onChange(value, 0, key);
 	}
 
 
@@ -225,16 +225,16 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 		onMenuChange && onMenuChange(open, key);
 	}
   private _onNativeFocus(event: FocusInputEvent) {
-    const { key, onFocus } = this.properties;
-    onFocus && onFocus(event);
+    const { key, value = '', onFocus } = this.properties;
+    onFocus && onFocus(event, value, key);
   }
 	private _onNativeBlur(event: FocusInputEvent) {
-		const { key, onBlur } = this.properties;
-		onBlur && onBlur(event);
+		const { key, value = '', onBlur } = this.properties;
+		onBlur && onBlur(event, value, key);
 	}
 	private _onNativeChange(event: Input) {
-		const { key, onChange } = this.properties;
-		onChange && onChange(event);
+		const { key, value = '', onChange } = this.properties;
+		onChange && onChange(value, 0, key);
 	}
 
 
@@ -250,7 +250,7 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 	protected getRootClasses(): (string | null)[] {
 		const {
 			disabled,
-			invalid,
+			valid,
 			readOnly,
 			required
 		} = this.properties;
@@ -259,7 +259,7 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 			css.root,
 			disabled ? css.disabled : null,
 			focus.containsFocus ? css.focused : null,
-			invalid ? css.invalid : null,
+			valid === false ? css.invalid : null,
 			readOnly ? css.readonly : null,
 			required ? css.required : null
 		];
@@ -289,7 +289,7 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 			extraClasses,
 			widgetId = this._uuid,
 			inputProperties,
-			invalid,
+			valid,
 			isOptionDisabled,
 			label,
 			labelAfter,
@@ -308,12 +308,12 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 			clearable,
 			disabled,
 			extraClasses,
-			getResultLabel: this._getOptionLabel.bind(this),
+			getOptionLabel: this._getOptionLabel.bind(this),
       onToken: (n: any) => [n],
 			widgetId,
 			//inputProperties, // TODO FIXME
-			invalid,
-			isResultDisabled: isOptionDisabled,
+			valid: valid === true || undefined,
+			getOptionDisabled: isOptionDisabled,
 			label,
 			labelAfter,
 			labelHidden,
@@ -337,7 +337,7 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 			end,
 			widgetId = this._uuid,
 			inputProperties = {},
-			invalid,
+			valid,
 			name,
 			readOnly,
 			required,
@@ -358,7 +358,7 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 				theme,
 				disabled,
 				focused: focus.containsFocus,
-				invalid,
+				valid: valid === true || undefined,
 				readOnly,
 				required,
 				hidden: labelHidden,
@@ -367,11 +367,11 @@ export class TimePickerBase<P extends TimePickerProperties = TimePickerPropertie
 			v('input', {
 				id: widgetId,
 				...formatAriaProperties(aria),
-				'aria-invalid': invalid === true ? 'true' : null,
+				'aria-invalid': valid === false ? 'true' : null,
 				'aria-readonly': readOnly === true ? 'true' : null,
 				classes: this.theme(css.input),
 				disabled,
-				invalid,
+				valid: valid === true || undefined,
 				key: 'native-input',
 				max: end,
 				min: start,

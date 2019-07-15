@@ -48,7 +48,7 @@
 	border-left: var(--ui-border-width) solid transparent;
 	border-right: var(--ui-border-width) solid transparent;
 	border-top: var(--ui-border-width) solid transparent;
-	border-bottom: var(--ui-border-width) solid var(--ui-outline);
+	border-bottom: var(--ui-border-width) solid var(--ui-menu-border);
 	color: var(--text-muted);
 	cursor: pointer;
 	display: inline-block;
@@ -103,7 +103,7 @@
 }
 .tabButton.enabled:focus,
 .tabButton.enabled.active {
-	border-color: var(--ui-outline);
+	border-color: var(--ui-menu-border);
 }
 
 .horizontal .tabButton:focus {
@@ -141,15 +141,15 @@
 }
 .alignLeft .tabButton:not(.active):hover,
 .alignRight .tabButton:not(.active):hover {
-	border-color: var(--ui-outline);
+	border-color: var(--ui-menu-border);
 	background-color: var(--ui-highlight-muted);
 }
 .alignLeft .tabButton.active,
 .alignRight .tabButton.active {
-	border-bottom-color: var(--ui-outline);
+	border-bottom-color: var(--ui-menu-border);
 }
 .alignLeft .tabButton.enabled.active, .alignRight .tabButton.enabled.active {
-	border-bottom-color: var(--ui-outline);
+	border-bottom-color: var(--ui-menu-border);
 }
 .alignLeft .tabButton.enabled.active:focus, .alignRight .tabButton.enabled.active:focus {
 	border-top-color: var(--bg);
@@ -203,9 +203,9 @@
 }
 
 .alignLeft .tabButton {
-	border-bottom: var(--ui-border-width) solid var(--ui-outline);
+	border-bottom: var(--ui-border-width) solid var(--ui-menu-border);
 	border-left: var(--ui-border-width) solid transparent;
-	border-right: var(--ui-border-width) solid var(--ui-outline);
+	border-right: var(--ui-border-width) solid var(--ui-menu-border);
 	border-top: var(--ui-border-width) solid transparent;
 	display: block;
 }
@@ -214,8 +214,8 @@
 }
 
 .alignRight .tabButton {
-	border-bottom: var(--ui-border-width) solid var(--ui-outline);
-	border-left: var(--ui-border-width) solid var(--ui-outline);
+	border-bottom: var(--ui-border-width) solid var(--ui-menu-border);
+	border-left: var(--ui-border-width) solid var(--ui-menu-border);
 	border-right: var(--ui-border-width) solid transparent;
 	border-top: var(--ui-border-width) solid transparent;
 	display: block;
@@ -226,7 +226,7 @@
 
 .alignBottom .tabButton {
 	border-bottom: none;
-	border-top-color: var(--ui-outline);
+	border-top-color: var(--ui-menu-border);
 }
 .alignBottom .active {
 	border-bottom-color: var(--ui-accent);

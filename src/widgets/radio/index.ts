@@ -29,8 +29,13 @@ export interface RadioProperties extends CheckProperties {}
 export class RadioBase<P extends RadioProperties = RadioProperties> extends CheckBase<P> {
 	protected _type = 'radio';
 	protected getInputClasses() { return [css.input, ...this.getSchemaClasses(css)] }
-	protected getRootClasses() { return this._getRootClasses(css) }
-	protected getModifierClasses() { return [css.normal] }
+	protected getRootClasses() {
+    return [
+      ...this._getRootClasses(css),
+      ...this.getSizeClasses(),
+    ]
+  }
+	protected getModifierClasses() { return [css.normal, css.radio] }
 	protected renderInputWrapper() {
 		return [
 			this.renderInput(),

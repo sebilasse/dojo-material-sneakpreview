@@ -6,26 +6,6 @@ import Dimensions from '@dojo/framework/widget-core/meta/Dimensions';
 import TextInputBase, { TextInputProperties } from '../baseInput';
 import * as css from '../themes/redaktor-default/text-area.m.css';
 
-export class ExpandHeight extends Dimensions {
-	set(key: string, isResize = false): any {
-	  const node = this.getNode(key);
-		if (node) {
-			const _lh = window.getComputedStyle(node).lineHeight;
-			const lh = _lh && parseInt(_lh.replace('px', ''), 10) || 0;
-			!isResize && node.setAttribute('style', '');
-			const { scroll, offset } = this.get(key);
-			if (isResize) {
-				const h = lh && Math.floor(Math.ceil(scroll.height / lh) * lh);
-				h && node.setAttribute('style', `height:${h}px;`);
-				return scroll.height;
-			} else if (scroll.height > offset.height) {
-				console.log(scroll.width);
-				node.setAttribute('style', `height:${Math.ceil(scroll.height)}px;`);
-				return scroll.height;
-			}
-		}
-	}
-}
 /**
  * @type TextareaProperties
  *
@@ -48,6 +28,22 @@ export interface TextareaProperties extends TextInputProperties {
 	expand?: boolean;
 }
 
+export class ExpandHeight extends Dimensions {
+	set(key: string, isResize = false): any {
+	  const node = this.getNode(key);
+		if (node) {
+			const _lh = window.getComputedStyle(node).lineHeight;
+			const lh = _lh && parseInt(_lh.replace('px', ''), 10) || 0;
+			!isResize && node.setAttribute('style', '');
+			const { scroll, offset } = this.get(key);
+			const h = lh && Math.floor(Math.ceil(scroll.height / lh) * lh) || scroll.height;
+			h && node.setAttribute('style', `height:${h}px;`);
+      //if (typeof h === 'number' && h > -1) (<any>node).style.height = `${h}px;`;
+			return scroll.height;
+		}
+	}
+}
+
 @theme(css)
 @customElement<TextareaProperties>({
 	tag: 'redaktor-text-area',
@@ -63,7 +59,6 @@ export interface TextareaProperties extends TextInputProperties {
 		'onKeyDown', 'onKeyPress', 'onKeyUp', 'onTouchCancel', 'onTouchEnd', 'onTouchStart'
 	]
 })
-
 export class TextareaBase<P extends TextareaProperties = TextareaProperties>
 extends TextInputBase<TextareaProperties> {
 	protected _inputElement = 'textarea';
@@ -82,6 +77,8 @@ extends TextInputBase<TextareaProperties> {
 		this.readonlyProp('value', this._value, event);
 		this.properties.onInput && this.properties.onInput(event);
 	}
+
+	/* TODO FIXME misfire */
 	protected _onMouseUp (event: MouseEvent) {
 		event.stopPropagation();
 		const { expand } = this.properties;
@@ -103,11 +100,12 @@ extends TextInputBase<TextareaProperties> {
 	}
 	protected getInputClasses() { return [css.input] }
 	protected getInputProperties() {
-		const { expand, columns, wrapText } = this.properties;
-		let { rows = 1 } = this.properties;
-		if (!expand) { rows = Math.max(rows, 3) }
+		const { size, expand, columns, wrapText } = this.properties;
+		const minRows = size === 'large' ? 4 : 3;
+		let { rows = minRows } = this.properties;
+		rows = Math.max(rows, minRows);
 		return {
-			style: expand ? '' : `height: 48px;`,
+			style: `height: calc(var(--line) * ${rows});`,
 			wrap: wrapText,
 			cols: columns ? `${columns}` : null,
 			rows: rows ? `${rows}` : null
@@ -123,8 +121,9 @@ extends TextInputBase<TextareaProperties> {
 			]
 		}, [
 			this.renderInput(),
-			this._box ? null : v('b', {classes: this.theme(css.border)}),
-			this._box ? null : this.renderLabel()
+			this.properties.outlined ? null : v('b', {classes: this.theme(css.border)}),
+			v('b', {classes: this.theme(css.bg)}),
+			this.renderLabel()
 		]);
 	}
 }

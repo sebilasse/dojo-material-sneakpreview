@@ -1,4 +1,6 @@
-import {DNode,v,w,WidgetBase,ThemedBase,ThemedProperties,theme} from '../common/Widget';
+import {
+	DNode, v, w, WidgetBase, ThemedBase, ThemedProperties, theme
+} from '../common/Widget';
 import { keyName } from '../common/util';
 import calendarBundle from './nls/Calendar';
 import Focus from '@dojo/framework/widget-core/meta/Focus';

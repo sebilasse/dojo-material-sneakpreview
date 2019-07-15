@@ -7,6 +7,9 @@ html {
 	--redaktor-btn-x: 50%;
 	--redaktor-btn-y: 50%;
 }
+button.root {
+	background: none;
+}
 .wrapper { composes: wrapper from './_ui.m.css'; }
 .inner { composes: inner from './_ui.m.css'; }
 .prefix { composes: prefix from './_ui.m.css'; }
@@ -15,15 +18,25 @@ html {
 .hasSuffix { composes: hasSuffix from './_ui.m.css'; }
 .square { composes: square from './_ui.m.css'; }
 .responsive { composes: responsive from './_ui.m.css'; }
+.shaped { }
 
 .root {
 	composes: ui-border ui-transition from './_ui.m.css';
 	--button-pulse: var(--ui-accent);
 	position: relative;
 	color: var(--text);
-	border-radius: var(--ui-border-radius);
+	border-radius: var(--ui-border-radius-emphasized);
 	cursor: pointer;
+}
+.root:not(.outlined):not(.flat),
+.root.filled {
 	background-color: var(--ui-bg);
+}
+.root.outlined {
+	border: none;
+}
+.root.outlined .animation {
+	border: var(--ui-border-width) solid var(--ui-border);
 }
 .root.flat {
 	--button-flat-hover: var(--ui-flat);
@@ -31,24 +44,25 @@ html {
 	color: var(--ui-border);
 	background: none;
 }
+.root.wide {
+	min-width: var(--redaktor-btn-min-w);
+}
 
 .root.wrapper {
 	padding: 0;
-	height: var(--ui-max-inner-h);
-	margin-top: var(--ui-max-t);
-	margin-bottom: var(--wrapper-max-b);
+	height: var(--ui-wrap-h);
+	margin-top: calc(var(--ui-t) * -1);
+	margin-bottom: calc(var(--ui-outer-h) - var(--ui-wrap-h) + var(--ui-t));
 }
 .root .inner {
-	padding: var(--ui-t) var(--spacing) 0 0;
+	text-transform: uppercase;
+	padding-left: var(--ui-lr-content);
+	padding-right: var(--ui-lr-content);
 	margin: 0;
-}
-.root:not(.responsive) {
-	min-width: var(--redaktor-btn-min-w);
 }
 
 .root .suffix {
 	margin: 0;
-	padding-top: var(--ui-t);
 	transition: border var(--ui-dpd-6) var(--ui-easing);
 }
 .root .suffix::before {
@@ -70,21 +84,27 @@ html {
 /* states */
 .enabled.parentSchema:hover,
 .enabled:focus {
-	border-color: var(--ui-hover);
+	border-color: var(--ui-hover-border);
 	outline: none;
 }
 .enabled.parentSchema.defaultDepth:hover .addon,
 .enabled.parentSchema.defaultDepth:focus .addon {
 	border-left-color: var(--ui-accent);
 }
+
+
 .enabled:not(.parentSchema).flat:hover,
 .enabled:not(.parentSchema).flat:focus {
 	background-color: var(--ui-flat);
 }
-.enabled:not(.parentSchema).raised:hover,
-.enabled:not(.parentSchema).raised:focus {
-	color: var(--text-selected);
+.enabled:not(.outlined):not(.flat):hover,
+.enabled:not(.outlined):not(.flat):focus {
+	/*color: var(--text-selected);*/
 	background-color: var(--ui-hover);
+}
+.enabled.outlined:hover .animation,
+.enabled.outlined:focus .animation {
+	border-color: var(--ui-hover-border);
 }
 
 .enabled.raised::after {
@@ -126,13 +146,13 @@ html {
 }
 .disabled,
 .disabled:hover {
-	border-color: var(--ui-border);
 	box-shadow: none;
 	color: var(--text-disabled);
 	cursor: default;
 }
-.disabled:not(.flat),
-.disabled:not(.flat):hover {
+.disabled.filled,
+.disabled:not(.flat):not(.filled):not(.outlined),
+.disabled:not(.flat):not(.filled):not(.outlined):hover {
 	background-color: var(--ui-disabled);
 }
 
@@ -143,6 +163,7 @@ html {
 	height: 100%;
   outline: none;
 	overflow: hidden;
+	border-radius: var(--ui-border-radius-emphasized);
 }
 @keyframes pulse {
 	0%   { opacity: 0; box-shadow: 0 0 0 1px var(--button-pulse); }
@@ -160,7 +181,7 @@ html {
 	width: 100%;
   height: 100%;
 	box-shadow: 0 0 0 0px var(--ui-border);
-	border-radius: var(--ui-max-inner-h);
+	border-radius: var(--ui-wrap-h);
 	z-index: 1;
 	transform: perspective(1px) translate(0, 0);
 }

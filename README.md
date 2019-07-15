@@ -5,6 +5,8 @@
 [![-](https://raw.githubusercontent.com/redaktor/style/master/assets/readme/lineBlue.png)](#)<br>
 
 Is a Work in Progress
+Please note: Most of the widgets come from dojo v3 –
+now updating the widgets to make it similar to v5
 
 ## Story
 

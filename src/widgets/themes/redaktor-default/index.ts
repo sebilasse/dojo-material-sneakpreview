@@ -2,6 +2,7 @@ import * as accordionPane from './accordion-pane.m.css';
 import * as appBar from './app-bar.m.css';
 import * as button from './button.m.css';
 import * as calendar from './calendar.m.css';
+import * as card from './card.m.css';
 import * as chip from './chip.m.css';
 import * as checkbox from './checkbox.m.css';
 import * as combobox from './combobox.m.css';
@@ -29,6 +30,7 @@ export default {
 	'app-bar': appBar,
 	'button': button,
 	'calendar': calendar,
+	'card': card,
 	'checkbox': checkbox,
 	'chip': chip,
 	'combobox': combobox,

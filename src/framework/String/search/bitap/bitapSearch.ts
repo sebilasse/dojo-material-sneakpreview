@@ -17,14 +17,14 @@ export function matchedIndices(matchmask: any[] = [], minMatchCharLength = 1) {
     } else if (!match && start !== -1) {
       end = i - 1
       if ((end - start) + 1 >= minMatchCharLength) {
-        matchedIndices.push([start, end])
+        matchedIndices.push([start, end + 1])
       }
       start = -1
     }
   }
   // (i-1 - start) + 1 => i - start
   if (matchmask[i - 1] && (i - start) >= minMatchCharLength) {
-    matchedIndices.push([start, i - 1])
+    matchedIndices.push([start, i])
   }
   return matchedIndices
 }

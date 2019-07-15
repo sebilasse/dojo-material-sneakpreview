@@ -48,7 +48,7 @@ export default class Tabs<P extends TabProperties = TabProperties> extends Theme
 			w(Tab, {
 				key: 'select-tab',
 				label: 'Selects'
-			}, [ w(SelectTab, {}) ]),
+			}, [ w(SelectTab, { size }) ]),
 			w(Tab, {
 				key: 'progress-tab',
 				label: 'Progress'

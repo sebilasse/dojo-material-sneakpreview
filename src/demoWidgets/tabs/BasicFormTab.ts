@@ -92,7 +92,7 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
       ]),
 
 			v('h3', [ 'Radio' ]),
-      w(Label, {size: 'default'}, ['Hello World']),
+      w(Label, { size }, ['default']),
 			v('div', [
 				w(Radio, {
 					size,
@@ -146,7 +146,128 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
 				})
 			]),
 
+			w(Label, { size }, ['outlined']),
+			v('div', [
+				w(Radio, {
+					size,
+					outlined: true,
+					checked: this._selectedRadio === 'outlined first',
+					value: 'outlined first',
+					label: 'An option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					outlined: true,
+					checked: this._selectedRadio === 'outlined second',
+					value: 'outlined second',
+					label: 'Option 2',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					outlined: true,
+					checked: this._selectedRadio === 'outlined primary',
+					value: 'outlined primary',
+					schema: 'primary',
+					label: 'Primary option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					outlined: true,
+					checked: this._selectedRadio === 'outlined secondary',
+					value: 'outlined secondary',
+					schema: 'secondary',
+					label: 'Secondary option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					outlined: true,
+					checked: this._selectedRadio === 'outlined light_green',
+					value: 'outlined light_green',
+					schema: 'light_green',
+					label: 'Custom color option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					outlined: true,
+					value: 'third',
+					label: 'Disabled option',
+					disabled: true,
+					name: 'sample-radios'
+				})
+			]),
+
+			w(Label, { size }, ['filled']),
+			v('div', [
+				w(Radio, {
+					size,
+					filled: true,
+					checked: this._selectedRadio === 'filled first',
+					value: 'filled first',
+					label: 'An option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					filled: true,
+					checked: this._selectedRadio === 'filled second',
+					value: 'filled second',
+					label: 'Option 2',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					filled: true,
+					checked: this._selectedRadio === 'filled primary',
+					value: 'filled primary',
+					schema: 'primary',
+					label: 'Primary option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					filled: true,
+					checked: this._selectedRadio === 'filled secondary',
+					value: 'filled secondary',
+					schema: 'secondary',
+					label: 'Secondary option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					filled: true,
+					checked: this._selectedRadio === 'filled light_green',
+					value: 'filled light_green',
+					schema: 'light_green',
+					label: 'Custom color option',
+					name: 'sample-radios',
+					onChange: this._radioChange
+				}),
+				w(Radio, {
+					size,
+					filled: true,
+					value: 'third',
+					label: 'Disabled option',
+					disabled: true,
+					name: 'sample-radios'
+				})
+			]),
+
 			v('h3', [ 'Checkbox' ]),
+			w(Label, { size }, ['default']),
 			v('div', [
 				w(Checkbox, {
 					size,
@@ -157,46 +278,141 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
 				}),
 				w(Checkbox, {
 					size,
-					checked: true,
 					schema: 'primary',
-					label: 'Checked primary checkbox',
+					label: 'Primary checkbox',
 					value: 'checkbox-example-2'
 				}),
 				w(Checkbox, {
 					size,
-					checked: true,
 					schema: 'secondary',
-					label: 'Checked secondary checkbox',
+					label: 'Secondary checkbox',
 					value: 'checkbox-example-3'
 				}),
 				w(Checkbox, {
 					size,
 					checked: true,
 					schema: 'indigo',
-					label: 'Custom color checkbox',
+					label: 'Custom color',
 					value: 'checkbox-example-4'
 				}),
 				w(Checkbox, {
 					size,
 					checked: true,
 					disabled: true,
-					label: 'Disabled checked checkbox',
 					value: 'disabled-checkbox-example-5'
 				}),
 				w(Checkbox, {
 					size,
 					checked: false,
 					disabled: true,
-					label: 'Disabled unchecked checkbox',
+					label: 'Disabled checkboxes',
 					value: 'disabled-uncheckbox-example-6'
 				})
 			]),
+
+			w(Label, { size }, ['outlined']),
+			v('div', [
+				w(Checkbox, {
+					size,
+					checked: true,
+					outlined: true,
+					label: 'Checked checkbox',
+					value: 'checkbox-example-1'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					schema: 'primary',
+					label: 'Primary checkbox',
+					value: 'checkbox-example-2'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					schema: 'secondary',
+					label: 'Secondary checkbox',
+					value: 'checkbox-example-3'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					checked: true,
+					schema: 'indigo',
+					label: 'Custom color',
+					value: 'checkbox-example-4'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					checked: true,
+					disabled: true,
+					value: 'disabled-checkbox-example-5'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					checked: false,
+					disabled: true,
+					label: 'Disabled checkboxes',
+					value: 'disabled-uncheckbox-example-6'
+				})
+			]),
+
+			w(Label, { size }, ['filled']),
+			v('div', [
+				w(Checkbox, {
+					size,
+					checked: true,
+					filled: true,
+					label: 'Checked checkbox',
+					value: 'checkbox-example-1'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					schema: 'primary',
+					label: 'Primary checkbox',
+					value: 'checkbox-example-2'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					schema: 'secondary',
+					label: 'Secondary checkbox',
+					value: 'checkbox-example-3'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					checked: true,
+					schema: 'indigo',
+					label: 'Custom color',
+					value: 'checkbox-example-4'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					checked: true,
+					disabled: true,
+					value: 'disabled-checkbox-example-5'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					checked: false,
+					disabled: true,
+					label: 'Disabled checkboxes',
+					value: 'disabled-uncheckbox-example-6'
+				})
+			]),
+
+			w(Label, { size }, ['default / "toggle" mode']),
 			v('div', [
 				w(Checkbox, {
 					size,
 					mode: Mode.toggle,
 					checked: this._toggleChecked,
-					label: 'Checkbox in "toggle" mode',
+					label: 'toggle',
 					onChange: this._toggleChange
 				}),
 				w(Checkbox, {
@@ -204,21 +420,21 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
 					mode: Mode.toggle,
 					checked: true,
 					schema: 'primary',
-					label: 'Primary "toggle"'
+					label: 'Primary toggle'
 				}),
 				w(Checkbox, {
 					size,
 					mode: Mode.toggle,
 					checked: true,
 					schema: 'secondary',
-					label: 'Secondary "toggle"',
+					label: 'Secondary toggle',
 				}),
 				w(Checkbox, {
 					size,
 					mode: 'toggle',
 					checked: true,
 					schema: 'orange',
-					label: 'Custom color "toggle"'
+					label: 'Custom color toggle'
 				}),
 				w(Checkbox, {
 					size,
@@ -231,7 +447,113 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
 				w(Checkbox, {
 					size,
 					checked: true,
-					label: 'Disabled toggle mode checked',
+					label: 'disabled',
+					/*offLabel: 'Off',*/
+					mode: Mode.toggle,
+					disabled: true
+				})
+			]),
+
+			w(Label, { size }, ['outlined / "toggle" mode']),
+			v('div', [
+				w(Checkbox, {
+					size,
+					outlined: true,
+					mode: Mode.toggle,
+					checked: true,
+					label: 'toggle'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					mode: Mode.toggle,
+					checked: true,
+					schema: 'primary',
+					label: 'Primary toggle'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					mode: Mode.toggle,
+					checked: true,
+					schema: 'secondary',
+					label: 'Secondary toggle',
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					mode: 'toggle',
+					checked: true,
+					schema: 'orange',
+					label: 'Custom color toggle'
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					checked: false,
+					schema: 'secondary',
+					offLabel: 'Off',
+          label: 'On',
+					mode: Mode.toggle
+				}),
+				w(Checkbox, {
+					size,
+					outlined: true,
+					checked: true,
+					label: 'disabled',
+					/*offLabel: 'Off',*/
+					mode: Mode.toggle,
+					disabled: true
+				})
+			]),
+
+			w(Label, { size }, ['filled / "toggle" mode']),
+			v('div', [
+				w(Checkbox, {
+					size,
+					filled: true,
+					mode: Mode.toggle,
+					checked: true,
+					label: 'toggle'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					mode: Mode.toggle,
+					checked: true,
+					schema: 'primary',
+					label: 'Primary toggle'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					mode: Mode.toggle,
+					checked: true,
+					schema: 'secondary',
+					label: 'Secondary toggle',
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					mode: 'toggle',
+					checked: true,
+					schema: 'orange',
+					label: 'Custom color toggle'
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					checked: false,
+					schema: 'secondary',
+					offLabel: 'Off',
+          label: 'On',
+					mode: Mode.toggle
+				}),
+				w(Checkbox, {
+					size,
+					filled: true,
+					checked: true,
+					label: 'disabled',
 					/*offLabel: 'Off',*/
 					mode: Mode.toggle,
 					disabled: true
@@ -242,9 +564,9 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
 			v('div', {
 				classes: css.buttons
 			}, [
-				w(Button, { size, popup: true/*, responsive: true*/ }, ['menu']),
 
-				v('h4', [ 'Enabled' ]),
+
+//				v('h4', [ 'Enabled' ]),
 /*				w(Checkbox, {
 					size: 'small',
 					checked: true,
@@ -276,16 +598,38 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
         v('br'),
 */
 
-
-        w(Button, { size }, [ 'Basic Button' ]),
-				w(Button, { size, depth: 'raised' }, [ 'Raised Button' ]),
-				w(Button, { size, depth: 'raised', schema: 'primary' }, [ 'Primary' ]),
-				w(Button, { size, depth: 'raised', schema: 'secondary' }, [ 'Secondary' ]),
-				v('br'),v('br'),
-				w(Button, { size, depth: 'flat' }, [ 'Flat Button' ]),
-				w(Button, { size, depth: 'flat', schema: 'primary' }, [ 'Primary' ]),
-				w(Button, { size, depth: 'flat', schema: 'secondary' }, [ 'Secondary' ]),
-				w(Button, { size, depth: 'flat', disabled: true }, [ 'Disabled' ]),
+				w(Label, { size }, ['default']),
+				v('div', [
+	        w(Button, { size }, [ 'Basic' ]),
+					w(Button, { size, schema: 'primary' }, [ 'Primary' ]),
+					w(Button, { size, schema: 'secondary' }, [ 'Secondary' ]),
+					w(Button, { size, schema: 'green' }, [ 'Custom' ]),
+					w(Button, { size, disabled: true }, [ 'Disabled' ]),
+				]),
+				w(Label, { size }, ['raised']),
+				v('div', [
+	        w(Button, { size, depth: 'raised' }, [ 'Basic' ]),
+					w(Button, { size, depth: 'raised', schema: 'primary' }, [ 'Primary' ]),
+					w(Button, { size, depth: 'raised', schema: 'secondary' }, [ 'Secondary' ]),
+					w(Button, { size, depth: 'raised', schema: 'green' }, [ 'Custom' ]),
+					w(Button, { size, depth: 'raised', disabled: true }, [ 'Disabled' ]),
+				]),
+				w(Label, { size }, ['flat']),
+				v('div', [
+					w(Button, { size, depth: 'flat' }, [ 'Basic' ]),
+					w(Button, { size, depth: 'flat', schema: 'primary' }, [ 'Primary' ]),
+					w(Button, { size, depth: 'flat', schema: 'secondary' }, [ 'Secondary' ]),
+					w(Button, { size, depth: 'flat', schema: 'green' }, [ 'Custom' ]),
+					w(Button, { size, depth: 'flat', disabled: true }, [ 'Disabled' ]),
+				]),
+				w(Label, { size }, ['outlined']),
+				v('div', [
+	        w(Button, { size, outlined: true }, [ 'Basic' ]),
+					w(Button, { size, outlined: true, schema: 'primary' }, [ 'Primary' ]),
+					w(Button, { size, outlined: true, schema: 'secondary' }, [ 'Secondary' ]),
+					w(Button, { size, outlined: true, schema: 'green' }, [ 'Custom' ]),
+					w(Button, { size, outlined: true, disabled: true }, [ 'Disabled' ]),
+				]),
 				v('br'),v('br'),
 				w(Checkbox, {
 					size,
@@ -311,7 +655,8 @@ export default class BasicFormTab<P extends TabProperties = TabProperties> exten
 				/*w(Button, { size, disabled: true, popup: { expanded: false, id: 'fakeId' } }, [ 'Popup' ]),*/
 				w(Button, {
           size, disabled: true, pressed: this._togglePressed, onClick: this._toggleButtonClick
-        }, [ 'Toggle' ])
+        }, [ 'Toggle' ]),
+				w(Button, { size, popup: true/*, responsive: true*/ }, ['menu'])
 			]),
       v('p',['Lorem Ipsum'])
 		]);

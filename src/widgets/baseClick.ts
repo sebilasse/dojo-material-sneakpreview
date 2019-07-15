@@ -1,9 +1,8 @@
 import {
-	CustomAriaProperties, InputEventProperties, PointerEventProperties, KeyEventProperties
+	CustomAriaProperties, InputEventProperties, PointerEventProperties,
+	KeyEventProperties, RedaktorProperties
 } from './common/interfaces';
-import {
-  DNode, v, w, Dimensions, RedaktorWidgetBase, RedaktorProperties, theme, customElement
-} from './common/Widget';
+import { DNode, v, w, Dimensions, RedaktorWidgetBase, theme, customElement } from './common/Widget';
 import keyboard from './common/events/keyboard';
 import { formatAriaProperties, Depth, Sizes } from './common/util';
 import { CustomElementChildType } from '@dojo/framework/widget-core/registerCustomElement';
@@ -26,6 +25,7 @@ InputEventProperties, PointerEventProperties, KeyEventProperties, CustomAriaProp
 	depth?: Depth | keyof typeof Depth;
 	value?: string;
 	pressed?: boolean;
+	wide?: boolean;
 	popup?: { expanded?: boolean; id?: string; type?: string } | boolean;
 	onClick?(evt?: Event): void;
 }
@@ -102,7 +102,7 @@ export default class ClickBase<P extends ClickProperties = ClickProperties> exte
 	}
 
 	protected getContent(): DNode[] {
-		const { disabled, popup = false, theme  } = this.properties;
+		const { disabled, outlined = false, popup = false, theme  } = this.properties;
 
 		if (this.children.length === 1 && typeof this.children[0] === 'string') {
 			this.children[0] = v('span',[this.children[0]]);
@@ -122,7 +122,9 @@ export default class ClickBase<P extends ClickProperties = ClickProperties> exte
 		}
 		if (!disabled) {
 			content.push(v('b', {
-				classes: this.theme(css.animation),
+				classes: [
+					this.theme(css.animation)
+				].concat(outlined ? this.getSchemaClasses(css) : null),
 				onanimationend: "this.blur()",
 				tabIndex: 0
 			}));
@@ -132,25 +134,31 @@ export default class ClickBase<P extends ClickProperties = ClickProperties> exte
 
 	protected getRootClasses(): any[] {
 		const {
-			disabled, pressed, popup = false, depth = 'defaultDepth', schema
+			disabled, pressed, schema, depth = 'defaultDepth', wide = false,
+			popup = false, outlined = false, shaped = false
 		} = this.properties;
 	//console.log(this.properties.size, this.getSizeClasses());
 		return [
 			...this.getSizeClasses(),
-			...this.getSchemaClasses(css),
+			//...this.getSchemaClasses(css),
+			...this.getStyleClasses(css),
 			...this.theme([
 				css.root,
 				css.wrapper,
 				popup ? css.hasSuffix : null,
 				this.getDisabledClass(css),
 				(depth in Depth) ? (<any>css)[depth] : css.defaultDepth,
+				wide ? css.wide : null,
 				pressed ? css.pressed : null
 			])
-		];
+		].concat(!outlined ? this.getSchemaClasses(css) : null);
 	}
-
-	render(): DNode {
-		const { aria = {}, id, name, disabled, pressed, type = 'button', value} = this.properties;
+	protected beforeRender(): any {}
+	protected render(): DNode {
+		this.beforeRender();
+		const {
+			aria = {}, id, name, disabled, pressed, type = 'button', value
+		} = this.properties;
 		let { popup = false } = this.properties;
 		if (popup === true) {
 			popup = { expanded: false, id: '' };

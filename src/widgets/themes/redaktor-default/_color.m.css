@@ -408,15 +408,15 @@
   /*-------------------
        Brand Colors
   --------------------*/
-  --color-redaktor        : #FF7A00;
-  --color-facebook        : #3B5998;
-  --color-twitter         : #0084B4;
-  --color-googlePlus      : #DC4A38;
-  --color-linkedIn        : #1F88BE;
-  --color-youtube         : #CC181E;
-  --color-instagram       : #49769C;
-  --color-pinterest       : #00ACED;
-  --color-vk              : #4D7198;
+  --color-redaktor    : #FF7A00;
+  --color-facebook    : #3B5998;
+  --color-twitter     : #0084B4;
+  --color-googlePlus  : #DC4A38;
+  --color-linkedIn    : #1F88BE;
+  --color-youtube     : #CC181E;
+  --color-instagram   : #49769C;
+  --color-pinterest   : #00ACED;
+  --color-vk          : #4D7198;
 
 
 
@@ -463,86 +463,106 @@
 */
 
 .light {
-  --disabledAlpha       : 0.64;
-  --bg                  : var(--m-50);
-  --ui-highlight        : var(--full-white);
-  --ui-highlight-muted  : var(--off-white);
-  --ui-status           : var(--m-300);
-  --ui-menu             : var(--m-100);
-  --ui-full             : var(--full-white);
-  --ui-fill             : var(--m-600);
-  --ui-header           : #e4faff;
-  --ui-focus            : #c30c70;
+  --disabledAlpha     : 0.64;
+  --bg                : var(--m-50);
+  --ui-highlight      : var(--full-white);
+  --ui-highlight-muted: var(--off-white);
+  --ui-status         : var(--m-300);
+  --ui-menu           : var(--m-100);
+  --ui-full           : var(--full-white);
+
+  --ui-header         : #e4faff;
+  --ui-focus          : #c30c70;
   /*--- Normal ---*/
-  --ui-border           : var(--m-600);
-  --ui-outline          : rgba(0, 0, 0, 0.16);
-  --ui-bg               : var(--full-white);
-  --ui-hover            : var(--m-900);
-  --ui-accent           : #ff7a00;
-  --ui-flat             : var(--m-600);
-  --ui-flat-accent      : #ffa754;
+  --ui-border         : var(--m-600);
+  --ui-outline        : var(--full-black);
+  --ui-menu-border    : rgba(0, 0, 0, 0.16);
+  --ui-bg             : var(--full-white);
+  --ui-fill           : var(--m-100);
+  --ui-fill-text      : var(--full-black);
+  --ui-hover-border   : var(--m-900);
+  --ui-hover          : var(--m-50);
+  --ui-accent         : #ff7a00;
+  --ui-flat           : var(--m-600);
+  --ui-flat-accent    : #ffa754;
   /*---   Emotive  ---*/
   --ui-info           : #0d7ecc;
-  --ui-success        : #13b20b;
+  --ui-success        : #95cc0d;
   --ui-warning        : #ffaf00;
   --ui-error          : #dc0005;
   /*---   debug  ---*/
-  --color-baseline 	     : rgba(255, 0, 0, 0.1);
-  --color-baseline-large : rgba(0, 255, 0, 1);
+  --color-baseline 	  : rgba(255, 0, 0, 0.1);
+  --color-baseline-xl : rgba(0, 255, 0, 1);
 }
 .light .primary,
 .light .secondary {
-  --ui-border           : var(--m-500);
-  --ui-bg               : var(--m-700);
-  --ui-hover            : var(--m-900);
-  --ui-accent           : var(--m-a400);
-  --ui-flat             : var(--m-100);
-  --ui-flat-accent      : var(--m-a200);
+  --ui-border         : var(--m-500);
+  --ui-outline        : var(--m-600);
+  --ui-bg             : var(--m-700);
+  --ui-fill           : var(--m-700);
+  --ui-fill-text      : var(--full-white);
+  --ui-hover-border   : var(--m-900);
+  --ui-hover          : var(--m-800);
+  --ui-accent         : var(--m-a400);
+  --ui-flat           : var(--m-100);
+  --ui-flat-accent    : var(--m-a200);
 }
 
 .dark {
-  --disabledAlpha       : 0.48;
-  --bg                  : #303030;
-  --ui-highlight        : #474747;
-  --ui-highlight-muted  : #3d3d3d;
-  --ui-status           : var(--full-black);
-  --ui-menu             : var(--m-900);
-  --ui-full             : var(--m-700);
-  --ui-fill             : var(--m-200);
-  --ui-header           : #004d95;
-  --ui-focus            : #dfdc00;
+  --disabledAlpha     : 0.48;
+  --bg                : #303030;
+  --ui-highlight      : #474747;
+  --ui-highlight-muted: #3d3d3d;
+  --ui-status         : var(--full-black);
+  --ui-menu           : var(--m-900);
+  --ui-full           : var(--m-700);
+
+  --ui-header         : #004d95;
+  --ui-focus          : #dfdc00;
   /*--- Normal ---*/
-  --ui-border           : var(--m-400);
-  --ui-outline          : rgba(0, 0, 0, 0.24);
-  --ui-bg               : var(--m-800);
-  --ui-hover            : rgba(255, 255, 255, 0.08);
-  --ui-accent           : #0d7ecc;
-  --ui-flat             : hsla(var(--m-h), var(--m-s), var(--m-l), 0.24);
-  --ui-flat-Accent      : #63b1ff;
+  --ui-border         : var(--m-400);
+  --ui-outline        : var(--m-300);
+  --ui-menu-border    : rgba(0, 0, 0, 0.24);
+  --ui-bg             : var(--m-800);
+  --ui-fill           : var(--m-100);
+  --ui-fill-text      : var(--full-black);
+  --ui-hover-border   : rgba(255, 255, 255, 0.24);
+  --ui-hover          : rgba(255, 255, 255, 0.08);
+  --ui-accent         : #0d7ecc;
+  --ui-flat           : hsla(var(--m-h), var(--m-s), var(--m-l), 0.24);
+  --ui-flat-Accent    : #63b1ff;
   /*---   Emotive  ---*/
   --ui-info           : #4197e7;
   --ui-success        : #95cc0d;
   --ui-warning        : #ffbb1d;
   --ui-error          : #ff3a23;
   /*---   debug  ---*/
-  --color-baseline 	     : rgba(255, 255, 100, 0.12);
-  --color-baseline-large : rgba(255, 255, 0, 1);
+  --color-baseline 	  : rgba(255, 255, 100, 0.12);
+  --color-baseline-xl : rgba(255, 255, 0, 1);
 }
 .dark .primary,
 .dark .secondary {
-  --ui-border   : var(--m-400);
-  --ui-bg       : var(--m-600);
-  --ui-hover    : var(--m-800);
-  --ui-accent   : var(--m-a400);
-  --ui-flat     : hsla(var(--m-h), var(--m-s), var(--m-l), 0.32);
+  --ui-border         : var(--m-400);
+  --ui-outline        : var(--m-300);
+  --ui-bg             : var(--m-600);
+  --ui-fill           : var(--m-100);
+  --ui-fill-text      : var(--full-black);
+  --ui-hover-border   : var(--m-800);
+  --ui-hover          : var(--m-900);
+  --ui-accent         : var(--m-a400);
+  --ui-flat           : hsla(var(--m-h), var(--m-s), var(--m-l), 0.32);
 }
 
 .colored {
-  --ui-border   : var(--m-400);
-  --ui-bg       : var(--m-600);
-  --ui-hover    : var(--m-800);
-  --ui-accent   : var(--m-a400);
-  --ui-flat     : hsla(var(--m-h), var(--m-s), var(--m-l), 0.32);
+  --ui-border         : var(--m-400);
+  --ui-outline        : var(--m-400);
+  --ui-bg             : var(--m-600);
+  --ui-fill           : var(--m-500);
+  --ui-fill-text      : var(--full-white);
+  --ui-hover-border   : var(--m-800);
+  --ui-hover          : var(--m-800);
+  --ui-accent         : var(--m-a400);
+  --ui-flat           : hsla(var(--m-h), var(--m-s), var(--m-l), 0.32);
 }
 
 .light_material { composes: grey light dark_text; }
@@ -602,5 +622,5 @@
   --ui-selected-grey    : var(--m-500); /* FIXME (tabs) */
 
   --color-baseline 	     : rgba(255, 255, 255, 0.12);
-  --color-baseline-large : rgba(100, 255, 100, 1);
+  --color-baseline-xl  : rgba(100, 255, 100, 1);
 }

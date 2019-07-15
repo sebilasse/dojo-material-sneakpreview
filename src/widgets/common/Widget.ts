@@ -1,10 +1,14 @@
+import {
+  RedaktorProperties, RedaktorSizesCSS, RedaktorSchemaCSS, RedaktorDisabledCSS,
+  RedaktorValidCSS, RedaktorStyleCSS
+} from './interfaces';
+import {
+  ThemedMixin as _TM, ThemedProperties as _TP, theme as _t
+} from '@dojo/framework/widget-core/mixins/Themed';
 import { DNode as _DN, WNode as _WN, WidgetProperties } from '@dojo/framework/widget-core/interfaces';
 import { v as _v, w as _w } from '@dojo/framework/widget-core/d';
 import { WidgetBase as _W } from '@dojo/framework/widget-core/WidgetBase';
 import { Dimensions as _D } from '@dojo/framework/widget-core/meta/Dimensions';
-import {
-  ThemedMixin as _TM, ThemedProperties as _TP, theme as _t
-} from '@dojo/framework/widget-core/mixins/Themed';
 import { MaterialSchema, Size, Sizes } from './util';
 import { customElement as _cE } from '@dojo/framework/widget-core/decorators/customElement';
 import * as colorCss from '../themes/redaktor-default/_color.m.css';
@@ -22,47 +26,6 @@ export type ThemedProperties = _TP;
 export const ThemedMixin = _TM;
 export const ThemedBase = _TM(_W);
 export const customElement = _cE;
-
-// interfaces for the extended API
-export interface RedaktorProperties extends _TP {
-  required?: boolean;
-  disabled?: boolean;
-  readOnly?: boolean;
-  invalid?: boolean;
-  responsive?: boolean;
-	size?: Sizes | undefined;
-	schema?: any//MaterialSchema | keyof typeof MaterialSchema;
-};
-export interface RedaktorBaseCSS {
-  /* only ENUMS Material and Size TODO */
-  [index:string]: string;
-  // FIXME TS next https://github.com/Microsoft/TypeScript/pull/23592
-}
-export interface RedaktorDisabledCSS extends RedaktorBaseCSS {
-  enabled: string;
-  disabled: string;
-  readonly?: any;
-}
-export interface RedaktorValidCSS extends RedaktorBaseCSS {
-  valid: string;
-  invalid: string;
-}
-export interface RedaktorSizesCSS extends RedaktorBaseCSS {
-  smallUI: string;
-  defaultUI: string;
-  mediumUI: string;
-  largeUI: string;
-  smallTypo: string;
-  defaultTypo: string;
-  mediumTypo: string;
-  largeTypo: string;
-  responsive: string;
-}
-export interface RedaktorSchemaCSS extends RedaktorBaseCSS {
-  parentSchema: string;
-}
-
-export type RedaktorCSS = RedaktorDisabledCSS & RedaktorValidCSS & RedaktorSchemaCSS;
 
 export class RedaktorWidgetBase<P extends RedaktorProperties> extends ThemedBase<P> {
   protected _css: any;
@@ -141,6 +104,44 @@ export class RedaktorWidgetBase<P extends RedaktorProperties> extends ThemedBase
 
   protected getValidClass(css: RedaktorValidCSS): (string | null) {
     const { invalid } = this.properties;
-    return (invalid === true) ? css.invalid : (invalid === false ? css.valid : null);
+    return invalid === true ? css.invalid : (invalid === false ? css.valid : null);
+  }
+
+  protected getStyleClasses(css: RedaktorStyleCSS): string[] {
+    const { filled, outlined, shaped } = this.properties;
+    const a = [];
+    (filled === true) && a.push(css.filled);
+    (outlined === true) && a.push(css.outlined);
+    (shaped === true) && a.push(css.shaped);
+    return a
+  }
+}
+
+export class RedaktorDimensions extends Dimensions {
+  getMargin(key: string): any {
+	  const node = this.getNode(key);
+		if (node) {
+			const _lh = window.getComputedStyle(node).lineHeight;
+      const lh = _lh && parseInt(_lh.replace('px', ''), 10) || 0;
+			const { scroll, offset } = this.get(key);
+			const h = lh && Math.ceil(Math.ceil(scroll.height / lh) * lh) || scroll.height;
+      if (typeof h === 'number' && h > 0) {
+        const mb = h - offset.height;
+        return mb
+      }
+    }
+    return 0
+  }
+  getRelativeWidth(key: string): any {
+	  const { offset } = this.get(key);
+    const node = this.getNode(key);
+    if (node) {
+			const w = (<any>node).offsetWidth;
+    }
+    if (offset.width) {
+      const vpW = window.innerWidth;
+      return Math.ceil((100 * offset.width) / vpW)
+    }
+    return 0
   }
 }

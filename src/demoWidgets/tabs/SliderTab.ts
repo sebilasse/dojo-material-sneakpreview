@@ -92,8 +92,8 @@ export default class SliderTab<P extends TabProperties = TabProperties> extends 
 					size,
 					label: 'Volume',
 					outputDisplay: 'inline',
-					addonBefore: [v('span',['X'])], // w(Icon, {type: 'minusIcon'})
-					addonAfter: [w(Icon, {type: 'plusIcon'})],
+					leading: [v('span',['X'])], // w(Icon, {type: 'minusIcon'})
+					trailing: [w(Icon, {type: 'plusIcon'})],
 					min: 0,
 					max: 100,
 					step: 10,

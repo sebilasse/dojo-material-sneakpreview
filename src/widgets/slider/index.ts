@@ -100,10 +100,10 @@ export default class Slider extends ProgressBase<SliderProperties> {
 	}
   protected getInputClasses(): (string | null)[] { return [css.input] }
 	protected getWrapperClasses(): (string | null)[] {
-		const { addonBefore = [], addonAfter = [] } = this.properties;
+		const { leading = [], trailing = [] } = this.properties;
 		return [
-			addonBefore.length > 0 ? css.hasPrefix : null,
-			addonAfter.length > 0 ? css.hasSuffix : null,
+			leading.length > 0 ? css.hasPrefix : null,
+			trailing.length > 0 ? css.hasSuffix : null,
 			css.responsive,
 			css.wrapper
 		]

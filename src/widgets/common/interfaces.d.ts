@@ -1,5 +1,6 @@
 import commonBundle from './nls/common';
-import { Keys } from './util';
+import { ThemedProperties } from '@dojo/framework/widget-core/mixins/Themed';
+import { Keys, Sizes } from './util';
 
 export type CommonMessages = typeof commonBundle.messages;
 
@@ -62,6 +63,7 @@ export interface LabeledProperties {
 	labelHidden?: boolean;
 	labelStatic?: boolean;
 	label?: string;
+	helperText?: string;
 }
 
 /**
@@ -70,16 +72,17 @@ export interface LabeledProperties {
  * Properties that can be set on a input component
  *
  * @property disabled       Prevents the user from interacting with the form field
- * @property widgetId        Adds an id property to the input node so custom labels are possible
- * @property invalid        Indicates the value entered in the form field is invalid
+ * @property widgetId       Adds an id property to the input node so custom labels are possible
+ * @property valid        	Indicates if the value entered in the form field is invalid
  * @property name           The form widget's name
  * @property readOnly       Allows or prevents user interaction
  * @property required       Whether or not a value is required
  */
-export interface InputProperties {
+export interface GenericInputProperties {
 	disabled?: boolean;
 	widgetId?: string;
-	invalid?: boolean;
+	valid?: { valid?: boolean; message?: string; } | boolean;
+
 	name?: string;
 	readOnly?: boolean;
 	required?: boolean;
@@ -135,3 +138,72 @@ export interface PointerEventProperties {
 	onTouchEnd?(event: TouchEvent): void;
 	onTouchCancel?(event: TouchEvent): void;
 }
+
+export interface HasInput {
+	documentMode: number,
+	beforeInput: boolean,
+	fallbackCompositionData: boolean,
+	compositionEvent: boolean,
+	textInputEvent: boolean,
+	beforeInputEmitted: boolean
+}
+
+export interface Level2Input {
+	inputType: string,
+	data: string | null,
+	dataTransfer: DataTransfer | null,
+	isComposing: boolean,
+	getTargetRanges: () => any[],
+	range: number[],
+	type: string
+}
+
+// interfaces for the extended API
+export interface RedaktorProperties extends ThemedProperties {
+  required?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  invalid?: boolean;
+  responsive?: boolean;
+	size?: Sizes | undefined;
+	schema?: any; // MaterialSchema | keyof typeof MaterialSchema; // TODO
+  filled?: boolean;
+  outlined?: boolean;
+  shaped?: boolean;
+}
+export interface RedaktorBaseCSS {
+  /* only ENUMS Material and Size TODO */
+  [index:string]: string;
+  // FIXME TS next https://github.com/Microsoft/TypeScript/pull/23592
+}
+export interface RedaktorSizesCSS extends RedaktorBaseCSS {
+  smallUI: string;
+  defaultUI: string;
+  mediumUI: string;
+  largeUI: string;
+  smallTypo: string;
+  defaultTypo: string;
+  mediumTypo: string;
+  largeTypo: string;
+  responsive: string;
+}
+export interface RedaktorSchemaCSS extends RedaktorBaseCSS {
+  parentSchema: string;
+  hasSchema?: any;
+}
+export interface RedaktorDisabledCSS extends RedaktorBaseCSS {
+  enabled: string;
+  disabled: string;
+  readonly?: any;
+}
+export interface RedaktorValidCSS extends RedaktorBaseCSS {
+  valid: string;
+  invalid: string;
+}
+export interface RedaktorStyleCSS extends RedaktorBaseCSS {
+  filled: string;
+  outlined: string;
+  shaped: string;
+}
+
+export type RedaktorCSS = RedaktorDisabledCSS & RedaktorValidCSS & RedaktorSchemaCSS;

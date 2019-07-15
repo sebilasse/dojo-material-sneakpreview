@@ -1,8 +1,8 @@
 .root {
 	box-sizing: border-box;
 	background: var(--ui-menu);
-	border-top: var(--ui-border-width) solid var(--ui-outline);
-	border-bottom: var(--ui-border-width) solid var(--ui-outline);
+	border-top: var(--ui-border-width) solid var(--ui-menu-border);
+	border-bottom: var(--ui-border-width) solid var(--ui-menu-border);
 	min-height: calc(4 * var(--line));
 	text-align: left;
 }

@@ -1,10 +1,9 @@
 import {
-	CustomAriaProperties, LabeledProperties, InputProperties, Input, Toggle,
-	CheckboxRadioEventProperties, KeyEventProperties, PointerEventProperties
+	CustomAriaProperties, LabeledProperties, GenericInputProperties, Input, Toggle,
+	CheckboxRadioEventProperties, KeyEventProperties, PointerEventProperties,
+	RedaktorStyleCSS, RedaktorCSS, RedaktorProperties
 } from './common/interfaces';
-import {
-  DNode, v, w, RedaktorCSS, RedaktorWidgetBase, RedaktorProperties, theme, customElement
-} from './common/Widget';
+import { DNode, v, w, RedaktorWidgetBase, theme, customElement } from './common/Widget';
 import { formatAriaProperties, Sizes } from './common/util';
 import uuid from '../framework/uuid';
 import Focus from '@dojo/framework/widget-core/meta/Focus';
@@ -12,8 +11,8 @@ import Icon from './icon/index';
 import Label from './label/index';
 import * as css from './themes/redaktor-default/checkbox.m.css';
 
-export interface CheckProperties extends RedaktorProperties,
-InputProperties, LabeledProperties, KeyEventProperties, PointerEventProperties,
+export interface CheckProperties extends RedaktorProperties, GenericInputProperties,
+LabeledProperties, KeyEventProperties, PointerEventProperties,
 CustomAriaProperties, CheckboxRadioEventProperties {
 	offLabel?: DNode;
 	checked?: boolean;
@@ -72,6 +71,7 @@ extends RedaktorWidgetBase<P> {
 		return [css.normal]
 	}
 	protected getInputClasses(): any[] {
+		//console.log(this.getSchemaClasses(css));
 		return [
       this.theme(css.input),
       ...this.getSchemaClasses(css)
@@ -80,7 +80,7 @@ extends RedaktorWidgetBase<P> {
 	protected getInnerClasses(): (string | null)[] {
 		return []
 	}
-	protected _getRootClasses(ui: RedaktorCSS = css): (string | null)[] {
+	protected _getRootClasses(ui: RedaktorCSS & RedaktorStyleCSS = css): (string | null)[] {
 		const { checked = false, required } = this.properties;
 		const focus = this.meta(Focus).get('root');
 		return [
@@ -88,7 +88,7 @@ extends RedaktorWidgetBase<P> {
 			ui.wrapper,
 			this.getDisabledClass(ui),
 			this.getValidClass(ui),
-			//...this.getSizeClasses(ui),
+			...this.getStyleClasses(ui),
 			checked ? ui.checked : null,
 			focus.containsFocus ? ui.focused : null,
 			required ? ui.required : null,
@@ -96,26 +96,30 @@ extends RedaktorWidgetBase<P> {
 		];
 	}
 	protected getRootClasses(): (string | null)[] { return this._getRootClasses() }
-	protected getLabel(key: string = 'label'): DNode {
+	protected renderLabel(key: string = 'label') {
+		//console.log('RL', this.properties.label)
+		if (!this.properties.label) { return v('p',['.']) }
 		const {
-			widgetId = this._uuid, aria = {}, checked = false, size = 'default',
-			disabled, invalid, label, offLabel, labelAfter = true, labelHidden, theme,
-			name, readOnly, required, schema, value = `${this._value}`
+			widgetId = this._uuid, size,
+			disabled, valid, label, offLabel, labelHidden = false,
+			readOnly, required, schema, theme
 		} = this.properties;
+
 		const focus = this.meta(Focus).get('root');
 		return w(Label, {
+			muted: true,
 			key,
 			size,
 			theme,
+			schema,
 			disabled,
-			focused: focus.containsFocus,
-			invalid,
+			valid: valid === true || undefined,
 			readOnly,
 			required,
+			focused: focus.containsFocus,
 			hidden: labelHidden,
-			forId: widgetId,
-			muted: true
-		}, [ key === 'label' ? label : offLabel ])
+			forId: widgetId
+		}, [ key === 'offLabel' ? offLabel : label ])
 	}
 
 	protected renderIcon(): DNode[] {
@@ -126,7 +130,7 @@ extends RedaktorWidgetBase<P> {
 	protected renderInput(): DNode {
 		const {
 			widgetId = this._uuid, aria = {}, checked = false, size = 'default',
-			disabled, invalid, label, labelAfter = true, labelHidden, theme,
+			disabled, valid, label, labelAfter = true, theme,
 			name, readOnly, required, schema, value = `${this._value}`
 		} = this.properties;
 		return v('input', {
@@ -135,7 +139,7 @@ extends RedaktorWidgetBase<P> {
 			classes: this.getInputClasses(),
 			checked,
 			disabled,
-			'aria-invalid': invalid === true ? 'true' : null,
+			'aria-invalid': valid === false ? 'true' : null,
 			name,
 			readOnly,
 			'aria-readonly': readOnly === true ? 'true' : null,
@@ -167,17 +171,20 @@ extends RedaktorWidgetBase<P> {
 		]
 	}
 
+	protected beforeRender(): any {}
 	protected render(): DNode {
-		const { label, offLabel, labelAfter = true } = this.properties;
+		this.beforeRender();
+		const { label, offLabel = null, labelAfter = true } = this.properties;
+
 		const children = [
-			offLabel ? this.getLabel('offLabel') : null,
+			offLabel ? this.renderLabel('offLabel') : null,
 			...this.renderInputWrapper(),
-			label ? this.getLabel() : null
+			this.renderLabel()
 		];
 
 		return v('div', {
 			key: 'root',
 			classes: this.getRootClasses()
-		}, labelAfter ? children : children.reverse());
+		}, (!!offLabel || !!labelAfter) ? children : children.reverse());
 	}
 }

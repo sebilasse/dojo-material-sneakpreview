@@ -1,7 +1,5 @@
-import {
-  DNode, v, RedaktorWidgetBase, RedaktorProperties, theme, customElement
-} from '../common/Widget';
-import { CustomAriaProperties } from '../common/interfaces';
+import { DNode, v, RedaktorWidgetBase, theme, customElement } from '../common/Widget';
+import { CustomAriaProperties, RedaktorProperties } from '../common/interfaces';
 import { formatAriaProperties, Size, MaterialSchema } from '../common/util';
 import * as baseCss from '../common/styles/base.m.css';
 import * as css from '../themes/redaktor-default/label.m.css';
@@ -16,7 +14,7 @@ import * as css from '../themes/redaktor-default/label.m.css';
  * @property focused
  * @property readOnly
  * @property required
- * @property invalid
+ * @property valid
  * @property hidden
  * @property muted
  */
@@ -26,7 +24,7 @@ export interface LabelProperties extends RedaktorProperties, CustomAriaPropertie
 	focused?: boolean;
 	readOnly?: boolean;
 	required?: boolean;
-	invalid?: boolean;
+	valid?: boolean;
 	hidden?: boolean;
 	muted?: boolean;
   style?: any;
@@ -38,7 +36,7 @@ export interface LabelProperties extends RedaktorProperties, CustomAriaPropertie
 	tag: 'redaktor-label',
 	properties: [
     'theme', 'schema', 'size', 'aria', 'extraClasses', 'focused',
-    'disabled', 'readOnly', 'required', 'invalid', 'hidden', 'muted'
+    'disabled', 'readOnly', 'required', 'valid', 'hidden', 'muted'
   ],
 	attributes: [],
 	events: []

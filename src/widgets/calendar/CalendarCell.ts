@@ -1,4 +1,6 @@
-import {DNode,v,WidgetBase,ThemedBase,ThemedProperties,theme} from '../common/Widget';
+import {
+  DNode, v, WidgetBase, ThemedBase, ThemedProperties, theme
+} from '../common/Widget';
 import Focus from '@dojo/framework/widget-core/meta/Focus';
 import * as css from '../themes/redaktor-default/calendar.m.css';
 

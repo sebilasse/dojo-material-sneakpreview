@@ -66,10 +66,10 @@ export class ProgressBase<P extends LinearProgressProperties = LinearProgressPro
 
 	protected getInputClasses(): (string | null)[] { return [css.input] }
 	protected getWrapperClasses(): (string | null)[] {
-		const { addonBefore = [], addonAfter = [] } = this.properties;
+		const { leading = [], trailing = [] } = this.properties;
 		return [
-			addonBefore.length > 0 ? css.hasPrefix : null,
-			addonAfter.length > 0 ? css.hasSuffix : null,
+			leading.length > 0 ? css.hasPrefix : null,
+			trailing.length > 0 ? css.hasSuffix : null,
 			css.responsive,
 			css.wrapper
 		]
@@ -253,12 +253,12 @@ export class ProgressBase<P extends LinearProgressProperties = LinearProgressPro
 
 	protected renderInputWrapper(value = 0, percentV = 0) {
 		const {
-			responsive = true, addonBefore = [], addonAfter = [],
+			responsive = true, leading = [], trailing = [],
 			vertical = false, height = '200px'
 		} = this.properties;
 		const _input = this.renderInput();
-		const _prefixes = addonBefore.map((addon: DNode) => this.renderAddon(addon, true));
-		const _suffixes = addonAfter.map((addon: DNode) => this.renderAddon(addon));
+		const _prefixes = leading.map((addon: DNode) => this.renderAddon(addon, true));
+		const _suffixes = trailing.map((addon: DNode) => this.renderAddon(addon));
 
 		return v('div', {
 			key: 'wrapper',
@@ -373,9 +373,9 @@ export class CircularProgress extends ProgressBase<CircularProgressProperties> {
 		const THICK = 3.6;
 		/* <--- TODO FIXME goes properties */
 
-		const { indeterminate, addonBefore = [], addonAfter = [] } = this.properties;
-		const _prefixes = addonBefore.map((addon: DNode) => this.renderAddon(addon, true));
-		const _suffixes = addonAfter.map((addon: DNode) => this.renderAddon(addon));
+		const { indeterminate, leading = [], trailing = [] } = this.properties;
+		const _prefixes = leading.map((addon: DNode) => this.renderAddon(addon, true));
+		const _suffixes = trailing.map((addon: DNode) => this.renderAddon(addon));
 		const easeIn = (t: number) => t * t;
 		const easeOut = (t: number) => {
 		  t = Math.min(Math.max(0, t), 1);
@@ -409,8 +409,8 @@ export class CircularProgress extends ProgressBase<CircularProgressProperties> {
 				...this.getSchemaClasses(css),
 				...this.theme([
 					isIntersecting && indeterminate ? cssCircular.indeterminate : cssCircular.determinate,
-					addonBefore.length > 0 ? cssCircular.hasPrefix : null,
-					addonAfter.length > 0 ? cssCircular.hasSuffix : null,
+					leading.length > 0 ? cssCircular.hasPrefix : null,
+					trailing.length > 0 ? cssCircular.hasSuffix : null,
 					cssCircular.wrapper
 				])
 			]

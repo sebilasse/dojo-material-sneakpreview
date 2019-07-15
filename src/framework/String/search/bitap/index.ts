@@ -11,7 +11,7 @@ export interface BitapProperties {
   minMatchCharLength?: number;
 }
 export interface BitapResult {
-  isMatch: boolean;
+  isMatch?: boolean;
   score: number;
   matchedIndices: any[];
 }
@@ -23,9 +23,9 @@ export function regexSearch(text: string, pattern: string, tokenSeparator = / +/
   let isMatch = !!matches;
   let matchedIndices = [];
   if (isMatch) {
-    for (let i = 0, matchesLen = matches.length; i < matchesLen; i += 1) {
+    for (let i = 0, matchesLen = matches.length; i <= matchesLen; i += 1) {
       let match = matches[i];
-      matchedIndices.push([text.indexOf(match), match.length - 1])
+      matchedIndices.push([text.indexOf(match), match.length])
     }
   }
   // TODO: revisit this score ?
@@ -88,12 +88,14 @@ export default class Bitap {
     if (!this.properties.caseSensitive) {
       text = text.toLowerCase()
     }
+    const searchBase = { needle: this.pattern, haystack: text };
     // Exact match
     if (this.pattern === text) {
       return {
         isMatch: true,
         score: 0,
-        matchedIndices: [[0, text.length - 1]]
+        matchedIndices: [[0, text.length]],
+        ...searchBase
       }
     }
     // When pattern length is greater than the machine word length, just do a a regex comparison
@@ -106,13 +108,16 @@ export default class Bitap {
       location = 0, distance = 100, threshold = 0.75,
       findAllMatches = false, minMatchCharLength = 1
     } = this.properties;
-    return bitapSearch(text, this.pattern, this.patternAlphabet, {
-      location,
-      distance,
-      threshold,
-      findAllMatches,
-      minMatchCharLength
-    })
+    return {
+      ...bitapSearch(text, this.pattern, this.patternAlphabet, {
+        location,
+        distance,
+        threshold,
+        findAllMatches,
+        minMatchCharLength
+      }),
+      ...searchBase
+    }
   }
 }
 // let x = new Bitap("od mn war", {})

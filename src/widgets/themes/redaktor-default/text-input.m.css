@@ -1,15 +1,4 @@
 
-.root {
-	composes: root ui-transition from './_ui.m.css';
-	--input-text: var(--text);
-	--input-text-muted: var(--text-muted);
-	margin-top: 0;
-  margin-bottom: 0;
-	padding-top: 0;
-	min-height: var(--ui-max-outer-h);
-	position: relative !important; /* required for dropdown */
-}
-
 .wrapper { composes: wrapper from './_ui.m.css'; }
 .inner { composes: inner from './_ui.m.css'; }
 .input { composes: input from './_ui.m.css'; }
@@ -20,49 +9,55 @@
 .responsive { composes: responsive from './_ui.m.css'; }
 .square { composes: square from './_ui.m.css'; }
 .absolute { composes: absolute from './_ui.m.css'; }
+
+.smallUI { composes: smallUI from './_ui.m.css'; }
+.defaultUI { composes: defaultUI from './_ui.m.css'; }
+.mediumUI { composes: mediumUI from './_ui.m.css'; }
+.largeUI { composes: largeUI from './_ui.m.css'; }
+.smallTypo { composes: smallTypo from './_ui.m.css'; }
+.defaultTypo { composes: defaultTypo from './_ui.m.css'; }
+.mediumTypo { composes: mediumTypo from './_ui.m.css'; }
+.largeTypo { composes: largeTypo from './_ui.m.css'; }
+
 .parentSchema { }
+.valid { }
+.root {
+	composes: ui-transition from './_ui.m.css';
+	--input-text: var(--text);
+	--input-text-muted: var(--text-muted);
+	--input-border-bottom: calc(var(--line) / 5);
+	--input-border-distance: calc(var(--line) - var(--input-border-bottom));
+	--input-fill: var(--ui-fill);
+	--root-border: var(--ui-border);
+	--root-bg: var(--bg);
+	--root-disabled: var(--ui-disabled);
+	margin-top: 0;
+  margin-bottom: 0;
+	min-height: var(--ui-outer-h);
+	position: relative !important; /* required for dropdown */
+}
+.root:not(.smallUI) {
+	padding-top: var(--line);
+}
+.root .wrapper {
+	position: relative;
+	height: var(--ui-wrap-h);
+	margin: calc(var(--ui-t) * -1) 0 var(--ui-inner-b) 0;
+	padding: 0;
+}
 .enabled .wrapper:hover {
 	cursor: pointer;
 }
-.slideLabel {
-	padding-top: var(--line);
-}
-.staticLabel:not(.smallUI)/*:not(.hasSchema)*/ {
-	min-height: calc(var(--ui-max-outer-h) + var(--line));
-	margin-bottom: var(--line);
-}
 
-.root .wrapper {
-	height: var(--ui-max-inner-h);
-	margin: var(--ui-max-t) 0 0 0;
-	padding: 0;
-}
-
-.root:not(.responsive) .wrapper {
-	width: var(--ui-default-input-width);
-}
-/* TODO !!! FIXME : */
-.root.smallUI.staticLabel label {
-	padding-top: 0;
-}
-.root:not(.smallUI) .prefix,
-.root:not(.smallUI) .suffix {
-	padding-top: calc(var(--wrapper-max-b) + var(--padding-top));
-	padding-bottom: 0px;
-}
-.root.smallUI .prefix,
-.root.smallUI .suffix {
-	padding-top: var(--padding-top); /*calc((var(--ui-max-t) * -1) + var(--padding-top));*/
-	padding-bottom: 0px;
-}
-/* <-- */
+.filled, .outlined, .shaped { }
 
 .root .input, .root .prefix, .root .suffix {
 	font: inherit;
 	font-weight: normal;
 	line-height: inherit;
-	/*padding-top: 0;
-	height: 100%;*/
+	padding-top: 0;
+	padding-bottom: 0;
+	height: 100%;
 	margin: 0;
 	position: relative;
 	color: var(--input-text);
@@ -73,7 +68,7 @@
 .root .prefix,
 .root .suffix {
 	display: inline-block;
-	min-width: var(--ui-max-inner-h);
+	min-width: var(--ui-wrap-h);
 	margin: 0;
 }
 
@@ -96,18 +91,15 @@
 	border-color: transparent;
 	background: inherit;
 }
-.input::placeholder {
+
+input.input::placeholder,
+input.input:placeholder-shown {
 	color: var(--input-text-muted);
 }
+
 .root div[pseudo="-webkit-textfield-decoration-container"] {
 	color: red;
 	text-align: right;
-}
-.root label {
-	width: 100%;
-	display: inline-block;
-	margin-bottom: 0;
-	cursor: pointer;
 }
 
 .invalid .input,
@@ -115,6 +107,13 @@
 	caret-color: var(--ui-error);
 }
 
+
+.helperText {
+	font-style: italic;
+}
+.invalid .helperText {
+	color: var(--ui-error);
+}
 /* animated borders */
 .border,
 .border::after {
@@ -122,109 +121,170 @@
 	position: absolute;
 	left: 0;
 	height: var(--ui-border-width-emphasized);
+	line-height: 0;
 	width: 100%;
+	cursor: text;
 }
 .border {
-	transition: background-color var(--ui-dpd-0) var(--ui-easing) 0ms;
-	bottom: calc(var(--line) / 5);
+	bottom: var(--input-border-bottom);
+}
+.enabled:not(.outlined) .border {
+	transition: background-color var(--ui-dpd-0) var(--ui-easing);
+}
+.filled .input:not(:focus) ~ .border {
+	height: var(--ui-border-width);
 }
 
 .border::after {
 	bottom: 0;
 	right: 0;
-  height: var(--ui-border-width-emphasized);
 	transform: scaleX(0);
   pointer-events: none;
-	transition: transform var(--ui-dpd-3) var(--ui-easing) 0ms;
+	transition: all var(--ui-dpd-3) var(--ui-easing) 0ms;
 }
-
-.enabled .input:not(:focus):not(:invalid) ~ .border {
+.enabled:not(.invalid):not(.outlined) .input:not(:invalid) ~ .border {
 	background-color: var(--ui-border);
 }
-.enabled .wrapper:hover .input:not(:focus):not(:invalid) ~ .border {
-	background-color: var(--ui-hover);
+.enabled:not(.invalid).outlined .input:not(:invalid) ~ .border {
+	background-color: transparent;
 }
-/*
-.enabled .wrapper.parentSchema:hover .input:not(:focus):not(:invalid) ~ .border {
-	background-color: var(--ui-hover);
+.enabled:not(.invalid):not(.outlined) .wrapper:hover .input:not(:focus):not(:invalid) ~ .border {
+	background-color: var(--ui-hover-border);
 }
-*/
-.enabled .input:focus:not(:invalid) ~ .border::after {
+.enabled:not(.invalid):not(.outlined) .input:not(:invalid) ~ .border::after {
 	background-color: var(--ui-flat);
 }
-.enabled .parentSchema .input:focus:not(:invalid) ~ .border::after {
+.enabled:not(.invalid):not(.outlined) .parentSchema .input:not(:invalid) ~ .border::after {
 	background-color: var(--ui-accent);
 }
-.invalid .border,
-.invalid .border::after,
-.enabled .input:invalid ~ .border,
-.enabled .input:invalid ~ .border::after {
+.invalid:not(.outlined) .border,
+.invalid:not(.outlined) .border::after,
+.enabled:not(.outlined) .input:invalid ~ .border,
+.enabled:not(.outlined) .input:invalid ~ .border::after {
 	background-color: var(--ui-error);
 }
-.input:focus ~ .border::after {
-	transition: transform var(--ui-dpd-1) var(--ui-easing) 0ms;
+.enabled:not(.outlined) .input:focus ~ .border::after {
+	transition: transform var(--ui-dpd-4) var(--ui-easing) 0ms;
 	transform: scaleX(1);
 }
 
-/* sliding labels */
-.root label {
+/* filled and outlined */
+.filled .border::before,
+.outlined .border::before {
+	content: "";
+	display: block;
 	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+.filled .border::before {
+	height: calc(var(--ui-outer-h) - var(--input-border-distance) + var(--ui-lr));
+	border-radius: var(--ui-border-radius-emphasized) var(--ui-border-radius-emphasized) 0 0;
+	background: var(--input-fill);
+}
+.outlined .border::before {
+	height: var(--ui-wrap-h);
+	border-radius: var(--ui-border-radius-emphasized);
+	border: var(--ui-border-width) solid var(--ui-outline);
+}
+.outlined .input:focus ~ .border::before {
+	border-width: var(--ui-border-width-emphasized);
+}
+
+.root:not(.responsive)::after,
+.root:not(.responsive) .wrapper {
+	width: var(--ui-default-input-width);
+}
+
+.outlined.invalid .border::before,
+.outlined.enabled .input:invalid ~ .border::before {
+	border-color: var(--ui-error);
+}
+
+
+.wrapper > label {
+	position: absolute;
+	display: inline-block;
+	top: calc(var(--ui-t) + var(--padding-top));
 	left: 0;
 	padding: 0;
+	margin-bottom: 0;
+	cursor: pointer;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100%;
+	overflow: hidden;
 	transform: scale(1, 1);
-	top: calc(var(--ui-max-t) * -1 + var(--padding-top));
 	color: var(--input-text-muted);
+	background-color: transparent;
 	transform-origin: top left;
-	transition-property: transform, top, color;
-	transition-duration: var(--ui-dpd-1);
+	transition-property: transform, top, color, background-color;
+	transition-duration: var(--ui-dpd-0);
 	transition-timing-function: var(--ui-easing);
 }
-.root .addonBefore ~ label {
-	left: var(--touch-target-min);
-}
-
-.root.slideLabel.smallUI .input:not(:focus):placeholder-shown ~ label {
-	top: var(--padding-top);
-}
-
+/* sliding labels */
 .hasSchema.slideLabel .input:not(:focus):placeholder-shown ~ label {
-	top: calc(var(--ui-max-t) * -1 + var(--padding-top));
 	transform: scale(1, 1);
 }
-
-.root.staticLabel label,
+.root.staticLabel .wrapper > label,
 .root.slideLabel .input:focus ~ label,
 .root.slideLabel .input:not(:placeholder-shown) ~ label {
-	top: var(--ui-label-t);
+	top: calc(var(--ui-t) - (var(--margin-bottom) * var(--small-size)));
 	transform: scale(var(--small-size), var(--small-size));
 }
+.outlined.staticLabel .wrapper > label,
+.outlined.slideLabel .input:focus ~ label,
+.outlined.slideLabel .input:not(:placeholder-shown) ~ label {
+	background: var(--root-bg);
+}
 
-.wrapper.hasSchema .input:focus ~ label {
+.root.filled .wrapper > label,
+.root.filled input.input,
+.root.filled textarea.input,
+.root.outlined .wrapper > label,
+.root.outlined input.input,
+.root.outlined textarea.input {
+	margin-left: var(--ui-l);
+	padding-left: 4px;
+	padding-right: 4px;
+}
+/*
+.root .prefix ~ label {
+	left: var(--touch-target-min);
+}
+*/
+.hasSchema .input:focus ~ label {
 	color: var(--ui-bg);
 }
-.wrapper.parentSchema .input:focus ~ label {
+.parentSchema .input:focus ~ label {
 	color: var(--ui-accent);
+}
+.invalid .input:focus ~ label,
+.wrapper .input:invalid:focus ~ label {
+	color: var(--ui-error);
 }
 
 .root.slideLabel .input::placeholder,
-.root.slideLabel .prefix {
-	transition: opacity var(--ui-dpd-2) var(--ui-easing);
+.root.slideLabel .prefix,
+.root.slideLabel .suffix {
+	transition: opacity var(--ui-dpd-1) var(--ui-easing);
 	opacity: 0;
 }
 .root.slideLabel .input:focus::placeholder,
-.root.slideLabel .input:focus ~ .prefix {
+.root.slideLabel .input:focus ~ .prefix,
+.root.slideLabel .input:focus ~ .suffix,
+.root.slideLabel .input:not(:placeholder-shown) ~ .prefix,
+.root.slideLabel .input:not(:placeholder-shown) ~ .suffix {
 	opacity: 1;
 }
 
-.disabled .border,
-.disabled .border::after {
-	height: var(--ui-border-width);
-}
 .disabled .input:not(:invalid) ~ .border {
-	background-color: var(--ui-disabled) !important;
+	background-color: var(--root-disabled) !important;
 }
 .disabled label {
-	color: var(--ui-disabled) !important;
+	color: var(--root-disabled) !important;
 }
 /*
 .disabled .input,
@@ -237,31 +297,21 @@
 .required { }
 .valid { }
 
-/* BOX variant */
-.staticLabel .wrapper.box,
-.slideLabel .wrapper.box {
-	margin-top: calc(var(--ui-max-t) + var(--margin-bottom));
+
+
+/* TODO !!! FIXME :
+.root.smallUI.staticLabel label {
+	padding-top: 0;
 }
-.wrapper.box .input
-/* TODO */
-/*.root:not(.hasSchema) .prefix,
-.root:not(.hasSchema) .suffix */ {
-	background-color: var(--native-input);
-	color: var(--native-input-text);
-	height: var(--ui-max-inner-h);
-	padding-left: var(--ui-lr);
-	padding-right: var(--ui-lr);
+.root:not(.smallUI) .prefix,
+.root:not(.smallUI) .suffix {
+	padding-top: calc(var(--wrap  per-max-b) + var(--padding-top));
+	padding-bottom: 0px;
 }
-.enabled .box .wrapper:hover {
-	box-shadow: var(--ui-dp-1);
+.root.smallUI .prefix,
+.root.smallUI .suffix {
+	padding-top: var(--padding-top);
+	padding-bottom: 0px;
 }
-.enabled .box .input:focus {
-	border-bottom-color: var(--ui-focus);
-	box-shadow: var(--ui-dp-1);
-	outline: none;
-}
-.disabled .box .input,
-.disabled .box .prefix,
-.disabled .box .suffix {
-	color: var(--text-disabled);
-}
+ */
+/* <-- */

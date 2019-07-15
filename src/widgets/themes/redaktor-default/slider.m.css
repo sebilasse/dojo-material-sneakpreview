@@ -50,6 +50,7 @@
 .noLabel { }
 .focused  { }
 .required { }
+.filled, .outlined, .shaped { }
 
 .input {
 	height: var(--ui-inner-h);

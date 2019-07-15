@@ -23,6 +23,7 @@
 .noLabel { }
 .enabled { }
 .disabled { }
+.filled, .outlined, .shaped { }
 
 .root {
 	margin-bottom: var(--line) !important;
@@ -35,10 +36,10 @@
 }
 
 .root.horizontal {
-	height: var(--ui-max-outer-h);
+	height: var(--ui-outer-h);
 }
 .root.labeled {
-	height: calc(var(--ui-max-outer-h) + var(--line));
+	height: calc(var(--ui-outer-h) + var(--line));
 }
 
 .vertical .responsive.wrapper {
@@ -279,7 +280,7 @@
 	100% { left: 107%; right: -8%; }
 }
 .indeterminate .absorb {
-	background: var(--ui-fill);
+	background: var(--ui-border);
 	animation: indeterminateProgress2 calc(var(--ui-dpd-animation) * 2.8) cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
 	animation-delay: calc(var(--ui-dpd-animation) * 1.5333333333);
 }

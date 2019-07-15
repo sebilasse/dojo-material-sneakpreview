@@ -1,7 +1,7 @@
 import {
-  DNode, v, RedaktorWidgetBase, RedaktorProperties, theme, customElement
-} from '../common/Widget';
-import { CustomAriaProperties, PointerEventProperties } from '../common/interfaces';
+  CustomAriaProperties, PointerEventProperties, RedaktorProperties
+} from '../common/interfaces';
+import { DNode, v, RedaktorWidgetBase, theme, customElement } from '../common/Widget';
 import { formatAriaProperties } from '../common/util';
 import * as baseCss from '../common/styles/base.m.css';
 import * as css from '../themes/redaktor-default/app-bar.m.css';

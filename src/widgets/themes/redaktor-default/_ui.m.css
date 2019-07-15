@@ -8,7 +8,7 @@
 	--pi: 3.14159265359;
 	--ui-font-weight       : 400;
   --ui-font-weight-bold  : 700;
-	--ui-default-input-width:224px; /* if neither responsive or width is given */
+	--ui-default-input-width: 270px; /* if neither responsive or width is given */
 	/* Border */
 	--ui-border-width: 1px;
 	--ui-border-width-emphasized: 2px;
@@ -40,9 +40,99 @@
   --fontPath   : '../../themes/redaktor-default/assets/fonts';
 }
 
+/* Dimensions */
+.smallUI { /* --wrapper-b: var(--lineHalf); Textarea TODO */
+	--ui-t: 0px;
+	--ui-l: var(--padding-top);
+	--ui-lr: 0px;
+	--ui-lr-content: 12px;
+	--ui-wrap-h: calc(var(--line) * 1.5);
+	--ui-inner-h: var(--line);
+	--ui-inner-b: 0px;
+	--ui-outer-h: var(--line2);
+	--ui-track-h: var(--ui-border-width-emphasized);
+	--check-scale: 1.2;
+}
+.defaultUI {
+	--ui-t: calc(var(--padding-top) * 2);
+	--ui-l: var(--lineHalf);
+	--ui-lr: var(--padding-top);
+	--ui-lr-content: 16px;
+	--ui-wrap-h: var(--line2);
+	--ui-inner-h: calc(var(--line) + var(--padding-top) * 2);
+	--ui-inner-b: var(--ui-t);
+	--ui-outer-h: var(--line3);
+	--ui-track-h: calc(var(--ui-border-width-emphasized) * 2);
+	--check-scale: 1.2;
+}
+.mediumUI {
+	--ui-t: var(--lineHalf);
+	--ui-l: calc(var(--line) / 1.618);
+	--ui-lr: var(--padding-top);
+	--ui-lr-content: 16px;
+	--ui-wrap-h: calc(var(--line) * 2.5);
+	--ui-inner-h: calc(var(--line) + var(--padding-top) * 4);
+	--ui-inner-b: 0px;
+	--ui-outer-h: var(--line4);
+	--ui-track-h: calc(var(--ui-inner-h) / 4);
+	--check-scale: 1.32;
+}
+.largeUI {
+	--ui-t: calc(var(--line) - var(--padding-top));
+	--ui-l: calc(var(--line) / 1.618);
+	--ui-lr: calc(var(--padding-top) * 2);
+	--ui-lr-content: 21px;
+	--ui-wrap-h: var(--line3);
+	--ui-inner-h: var(--line2);
+	--ui-inner-b: calc(var(--margin-bottom) - var(--line));
+	--ui-outer-h: var(--line4);
+	--ui-track-h: calc(var(--ui-inner-h) / 2);
+	--check-scale: 1.4;
+}
+
+/* Typo */
+.smallTypo {
+	composes: sans p from './_typo.css';
+}
+.defaultTypo,
+.mediumTypo,
+.largeTypo {
+	composes: sans h5 from './_typo.css';
+}
+.smallTypo,
+.strongTypo {
+	font-weight: var(--ui-font-weight-bold);
+}
+.muted {
+	color: var(--text-muted);
+}
+.accent {
+	color: var(--ui-accent);
+}
+.subtitle {
+	margin-top: calc(var(--line) * -1);
+}
+/* max. and min. bottom gap */
+.wide.spaced {
+  --top: calc((var(--line-h) - var(--cap-h)) / 2);
+  margin-bottom: calc(1em * (var(--line-h) - var(--top)));
+}
+.narrow.spaced {
+  --bottom: calc(var(--line) * var(--lines-below, 1));
+  margin-bottom: calc(var(--margin-bottom) - var(--bottom));
+}
+.helperText {
+	font-style: italic;
+}
+.invalid .helperText {
+	color: var(--ui-error);
+}
+.valid .helperText {
+	color: var(--ui-success);
+}
+
 /* Common ui classes */
 .running {}
-
 /*
 .root, .root *,
 .root::before, .root::after,
@@ -60,93 +150,11 @@
 	transition: transform var(--ui-dpd-1) var(--ui-easing);
 }
 .ui-border {
-  border: var(--ui-border-width) solid var(--ui-outline);
+  border: var(--ui-border-width) solid var(--ui-menu-border);
 }
 .ui-transition {
 	transition: all var(--ui-dpd-1) var(--ui-easing);
 	transform: translate3d(0, 0, 0);  /*force hardware acceleration in WebKit*/
-}
-
-/* typo */
-.smallTypo {
-	composes: sans p from './_typo.css';
-}
-.defaultTypo,
-.mediumTypo,
-.largeTypo {
-	composes: sans h5 from './_typo.css';
-}
-.smallTypo {
-	font-weight: var(--ui-font-weight-bold);
-}
-.strongTypo {
-	font-weight: var(--ui-font-weight-bold);
-}
-
-
-
-
-
-/* dimensions */
-
-.smallUI {
-	--wrapper-b: var(--line);
-	--ui-t: 0px;
-	--ui-lr: 0px;
-	--ui-inner-h: var(--line);
-	--ui-outer-h: var(--line);
-	--ui-track-h: var(--ui-border-width-emphasized);
-	--wrapper-max-b: var(--lineHalf);
-	--ui-max-t: 0px;
-	--ui-max-lr: var(--padding-top);
-	--ui-max-inner-h: calc(var(--line) * 1.5);
-	--ui-max-outer-h: var(--line3);
-	--ui-label-t: calc(1rem * var(--small-size) * -1);
-	--check-scale: 1.2;
-}
-.defaultUI {
-	--wrapper-b: calc(var(--ui-outer-h) - var(--ui-inner-h) + var(--line));
-	--ui-t: 0px;
-	--ui-lr: var(--padding-top);
-	--ui-inner-h: calc(var(--line) + var(--ui-lr) * 2);
-	--ui-outer-h: var(--line2);
-	--ui-track-h: calc(var(--ui-border-width-emphasized) * 2);
-	--wrapper-max-b: calc(var(--padding-top) * 2);
-	--ui-max-t: calc(var(--padding-top) * -2);
-	--ui-max-lr: var(--lineHalf);
-	--ui-max-inner-h: var(--line2);
-	--ui-max-outer-h: var(--line3);
-	--ui-label-t: calc(1rem * var(--cap-h) * -1 + var(--padding-top));
-	--check-scale: 1.2;
-}
-.mediumUI {
-	--wrapper-b: calc(var(--ui-outer-h) - var(--ui-inner-h) + var(--line));
-	--ui-t: calc(var(--padding-top) * -2);
-	--ui-lr: var(--padding-top);
-	--ui-inner-h: calc(var(--line) + var(--ui-lr) * 4);
-	--ui-outer-h: var(--line2);
-	--ui-track-h: calc(var(--ui-inner-h) / 4);
-	--wrapper-max-b: var(--line);
-	--ui-max-t: calc(var(--lineHalf) * -1 - 1px);
-	--ui-max-lr: calc(var(--line) / 1.618);
-	--ui-max-inner-h: calc(var(--line) * 2.5);
-	--ui-max-outer-h: var(--line3);
-	--ui-label-t: calc(var(--padding-top) * -1);
-	--check-scale: 1.32;
-}
-.largeUI {
-	--wrapper-b: calc(var(--ui-outer-h) - var(--ui-inner-h) - var(--ui-t));
-	--ui-t: calc(var(--padding-top) * -3);
-	--ui-lr: calc(var(--padding-top) * 2);
-	--ui-inner-h: var(--line2);
-	--ui-outer-h: var(--line2);
-	--ui-track-h: calc(var(--ui-inner-h) / 2);
-	--wrapper-max-b: calc(var(--line2) - var(--padding-top)); /* TODO line - pt ?*/
-	--ui-max-t: calc((var(--line) - var(--padding-top)) * -1);
-	--ui-max-inner-h: var(--line3);
-	--ui-max-outer-h: var(--line4);
-	--ui-label-t: 0px;
-	--check-scale: 1.4;
 }
 
 .wrapper {
@@ -158,7 +166,7 @@
 .wrapper:not(.responsive) {
 	display: inline-flex;
 	align-items: baseline;
-	margin-right: var(--line);
+	/*margin-right: var(--line);*/ /* TODO */
 }
 .responsive.wrapper {
 	display: inline-flex;
@@ -226,8 +234,6 @@
 	top: 0;
 }
 
-
-
 .ui-box {
 	--t: calc(var(--line) + var(--padding-top) - var(--ui-border-width));
 	--b: calc(var(--line) - var(--padding-top) - var(--ui-border-width));
@@ -235,16 +241,6 @@
 	padding: var(--t) var(--lr) var(--b) var(--lr);
 	margin: 0;
 }
-/* max. and min. bottom gap */
-.wide.spaced {
-  --top: calc((var(--line-h) - var(--cap-h)) / 2);
-  margin-bottom: calc(1em * (var(--line-h) - var(--top)));
-}
-.narrow.spaced {
-  --bottom: calc(var(--line) * var(--lines-below, 1));
-  margin-bottom: calc(var(--margin-bottom) - var(--bottom));
-}
-
 .debugBaseLine {
 	position: absolute;
 	top: 0;

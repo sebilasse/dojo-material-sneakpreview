@@ -1,7 +1,7 @@
 import Bitap, { BitapProperties, BitapResult } from './bitap';
+import { intersection } from '../../Array/diu';
 import { isArray } from '../../lang/isArrayTypes';
 import deepValue from './deepValue';
-
 const dv = ['./', 'NO'];
 
 /* // TODO:
@@ -38,23 +38,18 @@ export interface SearchProperties extends BitapProperties {
   sortFn?: SortFn;
   tokenize?: boolean;
   matchAllTokens?: boolean;
-  includeMatches?: boolean;
-  includeScore?: boolean;
   verbose?: boolean;
 }
 export interface SearchResult extends BitapResult {
-  /*
-    isMatch: boolean;
-    score: number;
-    matchedIndices: any[];
-  */
+  index: number;
   matches: any[];
-  item: any[];
+  value: string;
   output: any; // TODO
 }
 
 export default class StringSearch {
   protected properties: SearchProperties;
+  protected tokens = new Map();
   protected _list: string[];
   set collection(list: string[]) {
     this._list = list;
@@ -104,15 +99,13 @@ export default class StringSearch {
       // if `tokenize` is also true.
       matchAllTokens: false,
 
-      includeMatches: true,
-      includeScore: true,
-
       // Will print to the console. Useful for debugging.
       verbose: false,
       ...options
     };
     this._log(`---------\nSearch properties:`, this.properties);
     this.collection = list;
+    this.tokens = new Map();
   }
 
   async test(){
@@ -125,9 +118,7 @@ export default class StringSearch {
     const { fullSearcher, tokenSearchers } = this._prepareSearchers(pattern);
     let { weights, results } = this._search(fullSearcher, tokenSearchers);
     this._computeScore(weights, results);
-    if (this.properties.shouldSort) {
-      this._sort(results)
-    }
+    this.properties.shouldSort && this._sort(results);
     return this._format(results)
   }
 
@@ -147,7 +138,6 @@ export default class StringSearch {
   _search (fullSearcher: Bitap, tokenSearchers: any[]) {
     const {keys = [], getFn = deepValue} = this.properties;
     const list = this._list;
-
     const resultMap = {};
     const results: any[] = [];
 
@@ -213,7 +203,6 @@ export default class StringSearch {
     if (!value) { return }
     const { tokenSearchers, fullSearcher, resultMap = {}, results = [] } = searchers;
     const { tokenSeparator = / +/g, tokenize, matchAllTokens } = this.properties;
-    // Check if the text can be searched let exists = false;
     let averageScore = -1;
     let numTextMatches = 0;
 
@@ -223,7 +212,8 @@ export default class StringSearch {
       this._log(`Full text: "${value}", score: ${mainSearchResult.score}`);
 
       if (tokenize) {
-        let words = value.split(tokenSeparator);
+        let tokens = value.split(tokenSeparator);
+        this.tokens.set(index, tokens);
         let scores = [];
 
         for (let i = 0; i < tokenSearchers.length; i += 1) {
@@ -231,8 +221,8 @@ export default class StringSearch {
           this._log(`\nPattern: "${tokenSearcher.pattern}"`);
 
           let hasMatchInText = false;
-          for (let j = 0; j < words.length; j += 1) {
-            let word = words[j];
+          for (let j = 0; j < tokens.length; j += 1) {
+            let word = tokens[j];
             let tokenSearchResult = tokenSearcher.search(word);
             let obj: any = {};
             if (tokenSearchResult.isMatch) {
@@ -275,26 +265,33 @@ export default class StringSearch {
       if (checkTextMatches) {
         // Check if the item already exists in our results
         let existingResult = resultMap[index];
+        const { matchedIndices, needle, haystack } = mainSearchResult;
         if (existingResult) {
           // Use the lowest score
           // existingResult.score, bitapResult.score
           existingResult.output.push({
             key,
+            index,
             arrayIndex,
             value,
-            score: finalScore,
-            matchedIndices: mainSearchResult.matchedIndices
+            needle,
+            haystack,
+            matchedIndices,
+            score: finalScore
           })
         } else {
           // Add it to the raw result list
           resultMap[index] = {
-            item: record,
+            value: record,
             output: [{
               key,
+              index,
               arrayIndex,
               value,
+              needle,
+              haystack,
+              matchedIndices,
               score: finalScore,
-              matchedIndices: mainSearchResult.matchedIndices
             }]
           }
           results.push(resultMap[index])
@@ -304,10 +301,10 @@ export default class StringSearch {
       for (let i = 0, len = value.length; i < len; i += 1) {
         this._analyze({
           key,
+          index,
           arrayIndex: i,
           value: value[i],
-          record,
-          index
+          record
         }, {
           resultMap,
           results,
@@ -323,9 +320,10 @@ export default class StringSearch {
     for (let i = 0, len = results.length; i < len; i += 1) {
       const output = results[i].output;
       const scoreLen = output.length;
-      let currScore = 1;
+      let currScore = !!output[0].matchedIndices.length ? 0.99 : 1;
       let bestScore = 1;
       for (let j = 0; j < scoreLen; j += 1) {
+        if (!!output[j].matchedIndices.length) { output[j].score -= 0.001 }
         let weight = weights ? weights[output[j].key].weight : 1;
         let score = weight === 1 ? output[j].score : (output[j].score || 0.001);
         let nScore = score * weight;
@@ -337,7 +335,7 @@ export default class StringSearch {
           currScore *= nScore;
         }
       }
-      results[i].score = bestScore === 1 ? currScore : bestScore;
+      results[i].score = Math.max(0, bestScore === 1 ? currScore : bestScore);
       this._log(results[i])
     }
   }
@@ -349,49 +347,60 @@ export default class StringSearch {
 
   _format (results: SearchResult[]) {
     const {
-      includeMatches, includeScore, verbose, id, getFn = deepValue
+      verbose, id, caseSensitive, tokenSeparator = / +/g, getFn = deepValue
     } = this.properties;
-    const finalOutput = [];
+    const finalOutput: SearchResult[] = [];
     let transformers = [];
     this._log('\n\nOutput:\n\n', JSON.stringify(results));
 
-    if (includeMatches) {
-      transformers.push((result: SearchResult, data: SearchResult) => {
-        const output = result.output;
-        data.matches = [];
-
-        for (let i = 0, len = output.length; i < len; i += 1) {
-          let item = output[i];
-          if (item.matchedIndices.length === 0) { continue }
-          let obj: any = {
-            indices: item.matchedIndices,
-            value: item.value
-          };
-          if (item.key) {
-            obj.key = item.key
-          }
-          if (item.hasOwnProperty('arrayIndex') && item.arrayIndex > -1) {
-            obj.arrayIndex = item.arrayIndex;
-          }
-          data.matches.push(obj);
+    transformers.push((result: SearchResult, data: SearchResult) => {
+      const output = result.output;
+      data.matches = [];
+      for (let i = 0, len = output.length; i < len; i += 1) {
+        let item = output[i];
+        if (item.matchedIndices.length === 0) { continue }
+        let obj: any = {
+          indices: item.matchedIndices.map((range: [number, number]) => {
+            const haystack = item.haystack.substring(range[0], range[1]);
+            let type = (item.needle === item.haystack) ? 'exact' : 'fuzzy';
+            if (type === 'fuzzy') {
+              const tokens = this.tokens.get(item.index).map((t: string) => {
+                t = caseSensitive ? t : t.toLowerCase();
+                if (t === haystack) { type = 'token' }
+                return t
+              });
+              if (type === 'fuzzy') {
+                if (tokens.length === intersection(tokens, ...haystack.split(tokenSeparator)).length) {
+                  type = 'token'
+                }
+              }
+            }
+            return { type, range }
+          }),
+          value: item.value
+        };
+        if (item.key) {
+          obj.key = item.key
         }
-      })
-    }
-    if (includeScore) {
-      transformers.push((result: SearchResult, data: SearchResult) => {
+        if (item.hasOwnProperty('arrayIndex') && item.arrayIndex > -1) {
+          obj.arrayIndex = item.arrayIndex;
+        }
+        data.matches.push(obj);
+      }
+    });
+    transformers.push((result: SearchResult, data: SearchResult) => {
+      if (data.matches.length && data.matches[0].indices && data.matches[0].indices[0].type === 'exact') {
+        data.score = 0;
+      } else {
         data.score = result.score
-      })
-    }
+      }
+    });
+
     for (let i = 0, len = results.length; i < len; i += 1) {
       const result = results[i];
-      if (id) {
-        result.item = getFn(result.item, id)[0]
-      }
-      if (!transformers.length) {
-        finalOutput.push(result.item);
-        continue
-      }
-      const data: any = { item: result.item };
+      const { value, output, score = 1 } = result;
+      if (id) { result.value = getFn(result.value, id)[0] }
+      const data: any = { value, index: output[0].index };
       for (let j = 0, len = transformers.length; j < len; j += 1) {
         transformers[j](result, data)
       }

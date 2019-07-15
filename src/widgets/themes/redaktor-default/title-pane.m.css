@@ -63,9 +63,9 @@
 	--lr: calc(var(--line) / 1.618);
 	background-color: var(--bg);
 	border-top: var(--ui-border-width) solid transparent;
-	border-bottom: var(--ui-border-width) solid var(--ui-outline);
-	border-left: var(--ui-border-width) solid var(--ui-outline);
-	border-right: var(--ui-border-width) solid var(--ui-outline);
+	border-bottom: var(--ui-border-width) solid var(--ui-menu-border);
+	border-left: var(--ui-border-width) solid var(--ui-menu-border);
+	border-right: var(--ui-border-width) solid var(--ui-menu-border);
 	padding: var(--line) var(--lr) var(--line) var(--lr);
 	height: calc(var(--line) * 3);
 	margin-top: calc(-100% - var(--line) * 4);
