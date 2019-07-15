@@ -36257,6 +36257,7 @@ https://placehold.it/1280x640/fd8700/000 1280w`,
                 alt: 'a lighthouse',
                 styles: { width: '50%', height: 'auto' }
             }),
+            Object(_dojo_framework_widget_core_d__WEBPACK_IMPORTED_MODULE_0__["v"])('br'), Object(_dojo_framework_widget_core_d__WEBPACK_IMPORTED_MODULE_0__["v"])('p', { styles: { marginBottom: '10px' } }, ['X']), Object(_dojo_framework_widget_core_d__WEBPACK_IMPORTED_MODULE_0__["v"])('br'),
             Object(_dojo_framework_widget_core_d__WEBPACK_IMPORTED_MODULE_0__["w"])(_widgets_card__WEBPACK_IMPORTED_MODULE_7__["default"], { size }, []),
             //w(Chip, { size, schema: 'primary' }, [ 'Primary' ]),
             Object(_dojo_framework_widget_core_d__WEBPACK_IMPORTED_MODULE_0__["v"])('br'),
@@ -42400,7 +42401,7 @@ class RedaktorDimensions extends Dimensions {
             const lh = _lh && parseInt(_lh.replace('px', ''), 10) || 0;
             const { scroll, offset } = this.get(key);
             const h = lh && Math.ceil(Math.ceil(scroll.height / lh) * lh) || scroll.height;
-            if (typeof h === 'number' && h > 0) {
+            if (typeof h === 'number') {
                 const mb = h - offset.height;
                 return mb;
             }
@@ -43352,35 +43353,51 @@ let Image = class Image extends _common_Widget__WEBPACK_IMPORTED_MODULE_1__["Red
         super(...arguments);
         this._boundIsLarger = this.isLarger.bind(this);
         this._w = 0.1;
+        this._vw = 0.1;
+        this._mb = 0;
     }
     isLarger(contentRect) {
+        const { baselined = true } = this.properties;
         const vw = Math.ceil((100 * contentRect.width) / window.innerWidth);
+        const mb = this.meta(_common_Widget__WEBPACK_IMPORTED_MODULE_1__["RedaktorDimensions"]).getMargin('root');
         const grew = vw > this._w;
         this._w = vw;
+        if (grew) {
+            this._vw = vw;
+        }
+        if (baselined && this._mb !== mb) {
+            this._mb = mb;
+            this.invalidate();
+        }
         return grew;
     }
     render() {
         const { src, srcset, alt, baselined = true, styles = {} } = this.properties;
-        if (baselined) {
-            styles.marginBottom = `${this.meta(_common_Widget__WEBPACK_IMPORTED_MODULE_1__["RedaktorDimensions"]).getMargin('root')}px`;
-        }
+        /*if (baselined) {
+            const mb = this.meta(RedaktorDimensions).getMargin('root');
+            this._mb = mb;
+            //styles.marginBottom = `${mb}px`;
+            console.log('baselined', baselined, styles);
+        }*/
         const { isIntersecting } = this.meta(_dojo_framework_widget_core_meta_Intersection__WEBPACK_IMPORTED_MODULE_2__["Intersection"]).get('root');
-        const { isLarger } = this.meta(_dojo_framework_widget_core_meta_Resize__WEBPACK_IMPORTED_MODULE_3__["Resize"]).get('root', { isLarger: this._boundIsLarger });
-        //const recalc = srcset && !this.properties.sizes && isLarger;
-        const { sizes = `${this._w}vw` } = this.properties;
-        console.log('render image', isIntersecting, isLarger);
-        /*
-                if (recalc && isLarger) {
-                    console.log('isLarger', sizes)
-                }
-        */
+        const { isLarger = false } = this.meta(_dojo_framework_widget_core_meta_Resize__WEBPACK_IMPORTED_MODULE_3__["Resize"]).get('root', {
+            isLarger: this._boundIsLarger
+        });
+        const { sizes = `${this._vw}vw` } = this.properties;
         return Object(_common_Widget__WEBPACK_IMPORTED_MODULE_1__["v"])('img', {
             key: 'root',
             src,
             srcset,
             sizes,
             alt,
-            styles
+            styles: baselined ? Object.assign({}, styles, { marginBottom: `calc(${this._mb}px - var(--padding-top))` }) : styles
+            /*,
+            onload: (e:any) => {
+                if (baselined) {
+                    styles.marginBottom = `${this.meta(RedaktorDimensions).getMargin('root')}px`;
+                    this.invalidate()
+                }
+            }*/
             /*,
             onload: (e:any) => { this._w = this.meta(RedaktorDimensions).get('root').offset.width }
             */
